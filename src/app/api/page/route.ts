@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { isValidSlug, sanitizeSlug } from "@/lib/slug";
 
 function getAdminClient() {
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -25,11 +26,73 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const slug = (body.slug as string).toLowerCase().replace(/[^a-z0-9-]/g, "").slice(0, 60);
+    const slug = sanitizeSlug(body.slug as string);
 
-    if (slug.length < 2) {
+    if (!isValidSlug(slug)) {
       return NextResponse.json(
-        { success: false, error: "Slug must be at least 2 characters after cleaning" },
+        { success: false, error: "Slug must be 2-60 chars, lowercase, numbers, and hyphens only" },
+        { status: 400 }
+      );
+    }
+
+    const businessName = String(body.business_name || "").trim();
+    if (businessName.length < 2 || businessName.length > 120) {
+      return NextResponse.json(
+        { success: false, error: "business_name must be between 2 and 120 characters" },
+        { status: 400 }
+      );
+    }
+
+    const tagline = String(body.tagline || "").trim().slice(0, 160) || null;
+    const description = String(body.description || "").trim().slice(0, 4000) || null;
+    const contactEmail = String(body.contact_email || "").trim() || null;
+    const contactPhone = String(body.contact_phone || "").trim().slice(0, 40) || null;
+    const websiteUrl = String(body.website_url || "").trim() || null;
+    const locationAddress = String(body.location_address || "").trim().slice(0, 240) || null;
+    const brandColor = /^#[0-9a-fA-F]{6}$/.test(String(body.brand_color || ""))
+      ? String(body.brand_color)
+      : "#22c55e";
+
+    if (contactEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail)) {
+      return NextResponse.json(
+        { success: false, error: "Invalid contact_email" },
+        { status: 400 }
+      );
+    }
+
+    if (websiteUrl) {
+      try {
+        const parsed = new URL(websiteUrl);
+        if (!["http:", "https:"].includes(parsed.protocol)) {
+          return NextResponse.json(
+            { success: false, error: "website_url must be http or https" },
+            { status: 400 }
+          );
+        }
+      } catch {
+        return NextResponse.json(
+          { success: false, error: "Invalid website_url" },
+          { status: 400 }
+        );
+      }
+    }
+
+    const servicesInput = Array.isArray(body.services) ? body.services : [];
+    const services = servicesInput
+      .map((service: unknown) => {
+        const item = service as { name?: string; price?: string; description?: string };
+        return {
+          name: String(item?.name || "").trim().slice(0, 100),
+          price: String(item?.price || "").trim().slice(0, 60),
+          description: String(item?.description || "").trim().slice(0, 280),
+        };
+      })
+      .filter((service: { name: string }) => service.name.length > 0)
+      .slice(0, 20);
+
+    if (servicesInput.length > 20) {
+      return NextResponse.json(
+        { success: false, error: "Maximum 20 services allowed" },
         { status: 400 }
       );
     }
@@ -45,23 +108,27 @@ export async function POST(req: NextRequest) {
     const { data, error } = await adminClient.from("pages")
       .insert({
         slug,
-        business_name: body.business_name,
-        tagline: body.tagline || null,
-        description: body.description || null,
-        services: body.services || [],
-        contact_email: body.contact_email || null,
-        contact_phone: body.contact_phone || null,
-        website_url: body.website_url || null,
-        location_address: body.location_address || null,
-        brand_color: body.brand_color || "#22c55e",
+        business_name: businessName,
+        tagline,
+        description,
+        services,
+        contact_email: contactEmail,
+        contact_phone: contactPhone,
+        website_url: websiteUrl,
+        location_address: locationAddress,
+        brand_color: brandColor,
       })
       .select()
       .single();
 
     if (error) {
+      const status = error.code === "23505" ? 409 : 500;
+      const message = error.code === "23505"
+        ? "That slug is already taken. Try another one."
+        : error.message;
       return NextResponse.json(
-        { success: false, error: error.message },
-        { status: 500 }
+        { success: false, error: message },
+        { status }
       );
     }
 
@@ -75,9 +142,10 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
-  const slug = req.nextUrl.searchParams.get("slug");
+  const slugRaw = req.nextUrl.searchParams.get("slug");
+  const slug = sanitizeSlug(slugRaw || "");
 
-  if (!slug) {
+  if (!isValidSlug(slug)) {
     return NextResponse.json(
       { success: false, error: "slug query param required" },
       { status: 400 }

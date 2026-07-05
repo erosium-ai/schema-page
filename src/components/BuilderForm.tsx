@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { PageData, ServiceItem } from "@/lib/types";
+import { sanitizeSlug } from "@/lib/slug";
 
 interface BuilderFormProps {
   onPageCreated?: (page: PageData) => void;
@@ -12,12 +13,14 @@ export default function BuilderForm({ onPageCreated }: BuilderFormProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [createdSlug, setCreatedSlug] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
     setSuccess(false);
+    setCreatedSlug(null);
 
     const form = e.currentTarget;
     const formData = new FormData(form);
@@ -35,7 +38,7 @@ export default function BuilderForm({ onPageCreated }: BuilderFormProps) {
     }
 
     const payload = {
-      slug: (formData.get("slug") as string).trim().toLowerCase().replace(/\s+/g, "-"),
+      slug: sanitizeSlug(String(formData.get("slug") || "")),
       business_name: (formData.get("business_name") as string).trim(),
       tagline: (formData.get("tagline") as string)?.trim() || undefined,
       description: (formData.get("description") as string)?.trim() || undefined,
@@ -60,6 +63,7 @@ export default function BuilderForm({ onPageCreated }: BuilderFormProps) {
       }
 
       setSuccess(true);
+      setCreatedSlug(result.data.slug);
       onPageCreated?.(result.data);
       form.reset();
       setServiceCount(1);
@@ -78,6 +82,8 @@ export default function BuilderForm({ onPageCreated }: BuilderFormProps) {
           <input
             name="business_name"
             required
+            minLength={2}
+            maxLength={120}
             className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
             placeholder="Acme Corp"
           />
@@ -87,6 +93,8 @@ export default function BuilderForm({ onPageCreated }: BuilderFormProps) {
           <input
             name="slug"
             required
+            minLength={2}
+            maxLength={60}
             pattern="[a-z0-9-]+"
             className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
             placeholder="acme-corp"
@@ -99,6 +107,7 @@ export default function BuilderForm({ onPageCreated }: BuilderFormProps) {
         <label className="block text-sm font-medium mb-1">Tagline</label>
         <input
           name="tagline"
+          maxLength={160}
           className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
           placeholder="We make the best widgets"
         />
@@ -109,6 +118,7 @@ export default function BuilderForm({ onPageCreated }: BuilderFormProps) {
         <textarea
           name="description"
           rows={3}
+          maxLength={4000}
           className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
           placeholder="Tell visitors what you do..."
         />
@@ -122,16 +132,19 @@ export default function BuilderForm({ onPageCreated }: BuilderFormProps) {
               <input
                 name={`service_name_${i}`}
                 placeholder="Service name"
+                maxLength={100}
                 className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
               />
               <input
                 name={`service_price_${i}`}
                 placeholder="Price"
+                maxLength={60}
                 className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
               />
               <input
                 name={`service_desc_${i}`}
                 placeholder="Short description"
+                maxLength={280}
                 className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
               />
             </div>
@@ -160,6 +173,7 @@ export default function BuilderForm({ onPageCreated }: BuilderFormProps) {
           <label className="block text-sm font-medium mb-1">Phone</label>
           <input
             name="contact_phone"
+            maxLength={40}
             className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
             placeholder="+1 555 123 4567"
           />
@@ -180,6 +194,7 @@ export default function BuilderForm({ onPageCreated }: BuilderFormProps) {
           <label className="block text-sm font-medium mb-1">Location</label>
           <input
             name="location_address"
+            maxLength={240}
             className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
             placeholder="123 Main St, Brisbane"
           />
@@ -205,7 +220,12 @@ export default function BuilderForm({ onPageCreated }: BuilderFormProps) {
 
       {success && (
         <div className="p-3 bg-green-50 text-green-700 rounded-lg text-sm">
-          Page created! Your AI-Agent Friendly page is live.
+          <p>Page created! Your AI-Agent Friendly page is live.</p>
+          {createdSlug && (
+            <p className="mt-1">
+              Open: <a className="underline" href={`/${createdSlug}`} target="_blank" rel="noreferrer">/{createdSlug}</a>
+            </p>
+          )}
         </div>
       )}
 
