@@ -19,6 +19,24 @@ export default function PageShell({
   const schema = generateSchemaMarkup(page);
   const showDemoBanner = isDemoAllowlistEnabled();
   const isPro = !!page.is_pro;
+  const description = page.description?.trim() || "";
+  const isLongDescription = description.length > 180;
+  const hasContact = Boolean(
+    page.contact_email || page.contact_phone || page.website_url || page.location_address
+  );
+
+  const summaryParts: string[] = [];
+  if (page.tagline) summaryParts.push(page.tagline);
+  if (page.location_address) summaryParts.push(`Located at ${page.location_address}.`);
+  if (page.services && page.services.length > 0) {
+    summaryParts.push(`Offers ${page.services.length} service${page.services.length > 1 ? "s" : ""}.`);
+  }
+  if (page.contact_email || page.contact_phone) {
+    summaryParts.push("Contact details are listed below.");
+  }
+  const quickSummary =
+    summaryParts.join(" ") ||
+    `${page.business_name} now has a live business page. Add more details anytime to make it even clearer for customers.`;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -60,8 +78,27 @@ export default function PageShell({
             )}
           </div>
 
-          {page.description && (
-            <p className="text-gray-700 text-lg mb-8">{page.description}</p>
+          <section className="mb-8 rounded-xl border bg-gray-50 p-5">
+            <h2 className="text-lg font-bold mb-2 text-gray-900">Quick summary</h2>
+            <p className="text-gray-700">{quickSummary}</p>
+          </section>
+
+          {description && (
+            <section className="mb-8">
+              <h2 className="text-lg font-bold mb-3 text-gray-900">Description</h2>
+              {isLongDescription ? (
+                <details className="rounded-lg border bg-gray-50 p-4">
+                  <summary className="cursor-pointer text-sm font-semibold text-brand-600">
+                    View description
+                  </summary>
+                  <p className="text-gray-700 text-base mt-3 whitespace-pre-wrap">
+                    {description}
+                  </p>
+                </details>
+              ) : (
+                <p className="text-gray-700 text-lg">{description}</p>
+              )}
+            </section>
           )}
 
           {page.services && page.services.length > 0 && (
@@ -76,7 +113,16 @@ export default function PageShell({
                     <div>
                       <p className="font-semibold">{s.name}</p>
                       {s.description && (
-                        <p className="text-sm text-gray-600">{s.description}</p>
+                        s.description.length > 120 ? (
+                          <details className="mt-1">
+                            <summary className="cursor-pointer text-xs font-semibold text-brand-600">
+                              View description
+                            </summary>
+                            <p className="text-sm text-gray-600 mt-1">{s.description}</p>
+                          </details>
+                        ) : (
+                          <p className="text-sm text-gray-600">{s.description}</p>
+                        )
                       )}
                     </div>
                     {s.price && (
@@ -92,39 +138,45 @@ export default function PageShell({
 
           <section className="mb-8">
             <h2 className="text-lg font-bold mb-4 text-gray-900">Contact</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {page.contact_email && (
-                <a
-                  href={`mailto:${page.contact_email}`}
-                  className="flex items-center gap-2 text-brand-600 hover:underline"
-                >
-                  📧 {page.contact_email}
-                </a>
-              )}
-              {page.contact_phone && (
-                <a
-                  href={`tel:${page.contact_phone}`}
-                  className="flex items-center gap-2 text-brand-600 hover:underline"
-                >
-                  📞 {page.contact_phone}
-                </a>
-              )}
-              {page.website_url && (
-                <a
-                  href={page.website_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-brand-600 hover:underline"
-                >
-                  🌐 {page.website_url.replace(/^https?:\/\//, "")}
-                </a>
-              )}
-              {page.location_address && (
-                <p className="flex items-center gap-2 text-gray-700">
-                  📍 {page.location_address}
-                </p>
-              )}
-            </div>
+            {hasContact ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {page.contact_email && (
+                  <a
+                    href={`mailto:${page.contact_email}`}
+                    className="flex items-center gap-2 text-brand-600 hover:underline"
+                  >
+                    📧 {page.contact_email}
+                  </a>
+                )}
+                {page.contact_phone && (
+                  <a
+                    href={`tel:${page.contact_phone}`}
+                    className="flex items-center gap-2 text-brand-600 hover:underline"
+                  >
+                    📞 {page.contact_phone}
+                  </a>
+                )}
+                {page.website_url && (
+                  <a
+                    href={page.website_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-brand-600 hover:underline"
+                  >
+                    🌐 {page.website_url.replace(/^https?:\/\//, "")}
+                  </a>
+                )}
+                {page.location_address && (
+                  <p className="flex items-center gap-2 text-gray-700">
+                    📍 {page.location_address}
+                  </p>
+                )}
+              </div>
+            ) : (
+              <p className="text-sm text-gray-600 rounded-lg border bg-gray-50 p-3">
+                No contact details added yet.
+              </p>
+            )}
           </section>
 
           <details className="rounded-xl border border-dashed p-6 bg-gray-50">
