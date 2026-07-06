@@ -127,12 +127,12 @@ export default function PageShell({
             </div>
           </section>
 
-          <div className="rounded-xl border border-dashed p-6 bg-gray-50">
-            <h3 className="text-sm font-semibold text-gray-700 mb-2">
-              AI-Agent Readable Export
-            </h3>
-            <p className="text-xs text-gray-600 mb-3">
-              Copy the structured data below to feed this business into any AI system.
+          <details className="rounded-xl border border-dashed p-6 bg-gray-50">
+            <summary className="cursor-pointer text-sm font-semibold text-gray-700">
+              Advanced (optional): AI export tools
+            </summary>
+            <p className="text-xs text-gray-600 mt-2 mb-3">
+              Most people can ignore this. Open only if you want to copy technical data for AI tools.
             </p>
             <details>
               <summary className="cursor-pointer text-xs font-semibold text-brand-600">
@@ -150,9 +150,9 @@ export default function PageShell({
                 {schema.markdown}
               </pre>
             </details>
-          </div>
 
-          {downloadSection}
+            {downloadSection}
+          </details>
         </div>
 
         {!isPro && (
