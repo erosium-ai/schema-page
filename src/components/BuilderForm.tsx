@@ -14,6 +14,8 @@ export default function BuilderForm({ onPageCreated }: BuilderFormProps) {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [createdSlug, setCreatedSlug] = useState<string | null>(null);
+  const [slugValue, setSlugValue] = useState("");
+  const [slugEditedManually, setSlugEditedManually] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -38,7 +40,7 @@ export default function BuilderForm({ onPageCreated }: BuilderFormProps) {
     }
 
     const payload = {
-      slug: sanitizeSlug(String(formData.get("slug") || "")),
+      slug: sanitizeSlug(slugValue || String(formData.get("slug") || "")),
       business_name: (formData.get("business_name") as string).trim(),
       tagline: (formData.get("tagline") as string)?.trim() || undefined,
       description: (formData.get("description") as string)?.trim() || undefined,
@@ -67,6 +69,8 @@ export default function BuilderForm({ onPageCreated }: BuilderFormProps) {
       onPageCreated?.(result.data);
       form.reset();
       setServiceCount(1);
+      setSlugValue("");
+      setSlugEditedManually(false);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
@@ -85,21 +89,34 @@ export default function BuilderForm({ onPageCreated }: BuilderFormProps) {
             minLength={2}
             maxLength={120}
             className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
-            placeholder="Acme Corp"
+            placeholder="Joe's Plumbing"
+            onChange={(e) => {
+              if (!slugEditedManually || !slugValue) {
+                setSlugValue(sanitizeSlug(e.currentTarget.value));
+              }
+            }}
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">Page Slug *</label>
+          <label className="block text-sm font-medium mb-1">Your page link *</label>
           <input
             name="slug"
             required
             minLength={2}
             maxLength={60}
             pattern="[a-z0-9-]+"
+            value={slugValue}
+            onChange={(e) => {
+              setSlugEditedManually(true);
+              setSlugValue(sanitizeSlug(e.currentTarget.value));
+            }}
             className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
-            placeholder="acme-corp"
+            placeholder="joes-plumbing"
           />
-          <p className="text-xs text-gray-500 mt-1">yoursite.com/acme-corp</p>
+          <p className="text-xs text-gray-500 mt-1">
+            We'll suggest this from your business name. You can change it. Example:
+            <span className="font-medium"> /joes-plumbing</span>
+          </p>
         </div>
       </div>
 
