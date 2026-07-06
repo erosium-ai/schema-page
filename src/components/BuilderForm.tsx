@@ -158,6 +158,9 @@ export default function BuilderForm({ onPageCreated }: BuilderFormProps) {
           className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
           placeholder="Tell visitors what you do..."
         />
+        <p className="mt-1 text-xs text-gray-500">
+          Tip: include how you help customers and where you service so your business can rank higher in AI results across ChatGPT, Gemini, Grok, and Claude.
+        </p>
       </div>
 
       <div>
