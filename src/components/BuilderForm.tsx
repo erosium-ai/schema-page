@@ -6,16 +6,20 @@ import { sanitizeSlug } from "@/lib/slug";
 
 interface BuilderFormProps {
   onPageCreated?: (page: PageData) => void;
+  intent?: "free" | "pro";
 }
 
-export default function BuilderForm({ onPageCreated }: BuilderFormProps) {
+export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderFormProps) {
   const [serviceCount, setServiceCount] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [proCheckoutLoading, setProCheckoutLoading] = useState(false);
+  const [proCheckoutError, setProCheckoutError] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [createdSlug, setCreatedSlug] = useState<string | null>(null);
   const [slugValue, setSlugValue] = useState("");
   const [slugEditedManually, setSlugEditedManually] = useState(false);
+  const isProIntent = intent === "pro";
 
   const credentialsAiBaseUrl =
     process.env.NEXT_PUBLIC_CREDENTIALS_AI_URL ||
@@ -88,8 +92,45 @@ export default function BuilderForm({ onPageCreated }: BuilderFormProps) {
     }
   };
 
+  const handleStartProCheckout = async () => {
+    if (!createdSlug) return;
+
+    setProCheckoutLoading(true);
+    setProCheckoutError(null);
+
+    try {
+      const response = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ slug: createdSlug }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success || !data.url) {
+        setProCheckoutError(data.error || "Unable to start Pro checkout. Please try again.");
+        return;
+      }
+
+      window.location.href = data.url;
+    } catch (err) {
+      setProCheckoutError((err as Error).message || "Unable to start Pro checkout.");
+    } finally {
+      setProCheckoutLoading(false);
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      {isProIntent && (
+        <div className="rounded-xl border border-brand-200 bg-brand-50 px-4 py-3 text-sm text-brand-900">
+          <p className="font-semibold">You&apos;re starting Pro AI Presence.</p>
+          <p className="mt-1">
+            Step 1: create your AI-readable page. Step 2: continue to Pro checkout.
+          </p>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <label className="block text-sm font-medium mb-1">Business Name *</label>
@@ -271,7 +312,7 @@ export default function BuilderForm({ onPageCreated }: BuilderFormProps) {
           {createdSlug && (
             <div className="rounded-xl border border-brand-200 bg-brand-50/40 p-4 sm:p-5">
               <p className="text-sm font-semibold text-brand-800">Next step: turn this into a full trust + conversion funnel</p>
-              <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <a
                   href={`/${createdSlug}`}
                   target="_blank"
@@ -280,6 +321,14 @@ export default function BuilderForm({ onPageCreated }: BuilderFormProps) {
                 >
                   View my live page
                 </a>
+                <button
+                  type="button"
+                  onClick={handleStartProCheckout}
+                  disabled={proCheckoutLoading}
+                  className="inline-flex items-center justify-center rounded-lg border border-brand-600 bg-white px-4 py-2.5 text-sm font-semibold text-brand-700 hover:bg-brand-50 transition disabled:opacity-60"
+                >
+                  {proCheckoutLoading ? "Opening Pro checkout..." : "Start Pro AI Presence"}
+                </button>
                 <a
                   href={`${credentialsAiBaseUrl}/auth/register?${new URLSearchParams({
                     source: trackingSource,
@@ -297,6 +346,9 @@ export default function BuilderForm({ onPageCreated }: BuilderFormProps) {
                   Get TrustBadge verification
                 </a>
               </div>
+              {proCheckoutError && (
+                <p className="mt-2 text-xs text-red-700">{proCheckoutError}</p>
+              )}
               <p className="mt-3 text-xs text-brand-900/80">
                 Pro AI Presence <span className="font-semibold">$19/mo</span> + TrustBadge verification gives you stronger trust signals for customers and AI agents.
               </p>

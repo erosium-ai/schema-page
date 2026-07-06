@@ -1,6 +1,8 @@
 import BuilderForm from "@/components/BuilderForm";
+import BuilderFormIntent from "@/components/BuilderFormIntent";
 import SchemaBadge from "@/components/SchemaBadge";
 import { Wrench, Coffee, BookOpen, ArrowRight } from "lucide-react";
+import { Suspense } from "react";
 
 export default function Home() {
   return (
@@ -30,7 +32,9 @@ export default function Home() {
             </p>
           </div>
 
-          <BuilderForm />
+          <Suspense fallback={<BuilderForm />}>
+            <BuilderFormIntent />
+          </Suspense>
         </div>
 
         <section className="mt-16">
