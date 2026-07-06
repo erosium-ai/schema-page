@@ -17,6 +17,11 @@ export default function BuilderForm({ onPageCreated }: BuilderFormProps) {
   const [slugValue, setSlugValue] = useState("");
   const [slugEditedManually, setSlugEditedManually] = useState(false);
 
+  const credentialsAiBaseUrl =
+    process.env.NEXT_PUBLIC_CREDENTIALS_AI_URL ||
+    process.env.NEXT_PUBLIC_TRUSTBADGE_URL ||
+    "https://trustbadge-production-018a.up.railway.app";
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
@@ -245,12 +250,41 @@ export default function BuilderForm({ onPageCreated }: BuilderFormProps) {
       )}
 
       {success && (
-        <div className="p-3 bg-green-50 text-green-700 rounded-lg text-sm">
-          <p>Page created! Your AI-Agent Friendly page is live.</p>
+        <div className="space-y-4">
+          <div className="p-3 bg-green-50 text-green-700 rounded-lg text-sm">
+            <p>Page created! Your AI-Agent Friendly page is live.</p>
+            {createdSlug && (
+              <p className="mt-1">
+                Open: <a className="underline" href={`/${createdSlug}`} target="_blank" rel="noreferrer">/{createdSlug}</a>
+              </p>
+            )}
+          </div>
+
           {createdSlug && (
-            <p className="mt-1">
-              Open: <a className="underline" href={`/${createdSlug}`} target="_blank" rel="noreferrer">/{createdSlug}</a>
-            </p>
+            <div className="rounded-xl border border-brand-200 bg-brand-50/40 p-4 sm:p-5">
+              <p className="text-sm font-semibold text-brand-800">Next step: turn this into a full trust + conversion funnel</p>
+              <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <a
+                  href={`/${createdSlug}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center justify-center rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-700 transition"
+                >
+                  View my live page
+                </a>
+                <a
+                  href={`${credentialsAiBaseUrl}/auth/register?source=schemapage&slug=${encodeURIComponent(createdSlug)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center justify-center rounded-lg border border-brand-600 bg-white px-4 py-2.5 text-sm font-semibold text-brand-700 hover:bg-brand-50 transition"
+                >
+                  Get TrustBadge verification
+                </a>
+              </div>
+              <p className="mt-3 text-xs text-brand-900/80">
+                Pro AI Presence <span className="font-semibold">$19/mo</span> + TrustBadge verification gives you stronger trust signals for customers and AI agents.
+              </p>
+            </div>
           )}
         </div>
       )}
