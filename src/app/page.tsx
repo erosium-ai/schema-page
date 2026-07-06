@@ -26,6 +26,7 @@ export default function Home() {
             </p>
             <p className="mt-3 rounded-lg border border-brand-200 bg-brand-50 px-4 py-3 text-sm font-medium text-brand-900">
               Our goal: help get your business to the top of AI searches like ChatGPT, Gemini, Grok, and Claude.
+              <span className="block mt-1 font-semibold">So customers find you first — not your competitors.</span>
             </p>
           </div>
 
