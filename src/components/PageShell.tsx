@@ -1,9 +1,13 @@
+import { Suspense } from "react";
 import { PageData } from "@/lib/types";
 import { generateSchemaMarkup } from "@/lib/schema-generator";
 import SchemaBadge from "@/components/SchemaBadge";
+import UpgradeButton from "@/components/UpgradeButton";
+import CheckoutStatusBanner from "@/components/CheckoutStatusBanner";
 import { isDemoAllowlistEnabled } from "@/lib/founder";
 import DemoBanner from "@/components/DemoBanner";
 import { JSX } from "react";
+import { Sparkles } from "lucide-react";
 
 export default function PageShell({
   page,
@@ -14,9 +18,14 @@ export default function PageShell({
 }) {
   const schema = generateSchemaMarkup(page);
   const showDemoBanner = isDemoAllowlistEnabled();
+  const isPro = !!page.is_pro;
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Suspense fallback={null}>
+        <CheckoutStatusBanner />
+      </Suspense>
+
       {showDemoBanner && <DemoBanner />}
 
       <script
@@ -31,7 +40,14 @@ export default function PageShell({
               SchemaPage Business Card
             </span>
           </div>
-          {!page.is_pro && <SchemaBadge />}
+          {isPro ? (
+            <span className="inline-flex items-center gap-1.5 bg-amber-100 text-amber-800 text-sm font-bold px-3 py-1.5 rounded-full">
+              <Sparkles className="h-4 w-4" />
+              PRO
+            </span>
+          ) : (
+            <SchemaBadge />
+          )}
         </div>
       </header>
 
@@ -138,6 +154,46 @@ export default function PageShell({
 
           {downloadSection}
         </div>
+
+        {!isPro && (
+          <div className="mt-8 bg-white rounded-2xl shadow-sm border p-8 md:p-10">
+            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+              <div className="space-y-4">
+                <div className="inline-flex items-center gap-1.5 text-brand-600 font-semibold text-sm">
+                  <Sparkles className="h-4 w-4" />
+                  SchemaPage Pro
+                </div>
+                <h2 className="text-2xl font-extrabold text-gray-900">
+                  Unlock SchemaPage Pro
+                </h2>
+                <ul className="space-y-2 text-gray-700">
+                  <li className="flex items-start gap-2">
+                    <span className="text-brand-600 mt-0.5">✓</span>
+                    Remove SchemaPage branding
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-brand-600 mt-0.5">✓</span>
+                    Edit anytime
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-brand-600 mt-0.5">✓</span>
+                    Priority support
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-brand-600 mt-0.5">✓</span>
+                    All future Pro features
+                  </li>
+                </ul>
+                <p className="text-lg font-semibold text-gray-900">
+                  $29 AUD <span className="text-sm font-normal text-gray-500">— one-time payment</span>
+                </p>
+              </div>
+              <div className="shrink-0">
+                <UpgradeButton slug={page.slug} />
+              </div>
+            </div>
+          </div>
+        )}
       </main>
 
       <footer className="border-t bg-white">

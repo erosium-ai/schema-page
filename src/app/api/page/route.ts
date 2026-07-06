@@ -1,6 +1,57 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { createHash } from "node:crypto";
 import { isValidSlug, sanitizeSlug } from "@/lib/slug";
+
+const RATE_LIMIT_PER_24H = 1;
+
+function hashIp(ip: string): string {
+  return createHash("sha256").update(ip).digest("hex");
+}
+
+function getClientIp(req: NextRequest): string {
+  const forwarded = req.headers.get("x-forwarded-for");
+  if (forwarded) {
+    const first = forwarded.split(",")[0]?.trim();
+    if (first) return first;
+  }
+
+  const realIp = req.headers.get("x-real-ip");
+  if (realIp) return realIp;
+
+  return "unknown";
+}
+
+type AdminClient = NonNullable<ReturnType<typeof getAdminClient>>;
+
+async function checkRateLimit(
+  adminClient: AdminClient,
+  ipHash: string
+): Promise<{ ok: boolean; error?: string }> {
+  if (ipHash === hashIp("unknown")) {
+    return { ok: true };
+  }
+
+  const { count, error } = await adminClient
+    .from("page_creations")
+    .select("*", { count: "exact", head: true })
+    .eq("ip_hash", ipHash)
+    .gt("created_at", new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
+
+  if (error) {
+    return { ok: false, error: error.message };
+  }
+
+  if (count && count >= RATE_LIMIT_PER_24H) {
+    return {
+      ok: false,
+      error:
+        "You've already created a page recently. Please upgrade to Pro to create more, or try again in 24 hours.",
+    };
+  }
+
+  return { ok: true };
+}
 
 function getAdminClient() {
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -105,6 +156,17 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const clientIp = getClientIp(req);
+    const ipHash = hashIp(clientIp);
+
+    const rateLimit = await checkRateLimit(adminClient, ipHash);
+    if (!rateLimit.ok) {
+      return NextResponse.json(
+        { success: false, error: rateLimit.error },
+        { status: 429 }
+      );
+    }
+
     const { data, error } = await adminClient.from("pages")
       .insert({
         slug,
@@ -130,6 +192,14 @@ export async function POST(req: NextRequest) {
         { success: false, error: message },
         { status }
       );
+    }
+
+    // Record creation for IP-based rate limiting (privacy-safe; hashed IP)
+    if (clientIp !== "unknown") {
+      await adminClient.from("page_creations").insert({
+        ip_hash: ipHash,
+        slug,
+      });
     }
 
     return NextResponse.json({ success: true, data });
