@@ -35,7 +35,7 @@ export default function PageShell({
   }
   const quickSummary =
     summaryParts.join(" ") ||
-    `${page.business_name} now has a live business page. Add more details anytime to make it even clearer for customers.`;
+    `${page.business_name} now has a live business page. Add more details when you're ready to make it even clearer for customers.`;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -220,7 +220,7 @@ export default function PageShell({
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-brand-600 mt-0.5">✓</span>
-                    Edit anytime
+                    Upgrade this page to Pro
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-brand-600 mt-0.5">✓</span>

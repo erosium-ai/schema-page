@@ -116,7 +116,7 @@ export default function BuilderForm({ onPageCreated }: BuilderFormProps) {
             placeholder="joes-plumbing"
           />
           <p className="text-xs text-gray-500 mt-1">
-            We suggest you use your business name. You can change it any time.
+            We suggest you use your business name so customers can find you easily.
           </p>
           <p className="text-xs text-gray-500 mt-1">
             Example: <span className="font-medium">www.schemapage.com/</span>
