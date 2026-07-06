@@ -31,6 +31,34 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
   const trackingMedium = "in_app";
   const trackingContent = "success_state_block";
 
+  const startProCheckout = async (slug: string): Promise<boolean> => {
+    setProCheckoutLoading(true);
+    setProCheckoutError(null);
+
+    try {
+      const response = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ slug }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success || !data.url) {
+        setProCheckoutError(data.error || "Unable to start Pro checkout. Please try again.");
+        return false;
+      }
+
+      window.location.href = data.url;
+      return true;
+    } catch (err) {
+      setProCheckoutError((err as Error).message || "Unable to start Pro checkout.");
+      return false;
+    } finally {
+      setProCheckoutLoading(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
@@ -81,6 +109,11 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
       setSuccess(true);
       setCreatedSlug(result.data.slug);
       onPageCreated?.(result.data);
+
+      if (isProIntent) {
+        await startProCheckout(result.data.slug);
+      }
+
       form.reset();
       setServiceCount(1);
       setSlugValue("");
@@ -95,29 +128,7 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
   const handleStartProCheckout = async () => {
     if (!createdSlug) return;
 
-    setProCheckoutLoading(true);
-    setProCheckoutError(null);
-
-    try {
-      const response = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slug: createdSlug }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok || !data.success || !data.url) {
-        setProCheckoutError(data.error || "Unable to start Pro checkout. Please try again.");
-        return;
-      }
-
-      window.location.href = data.url;
-    } catch (err) {
-      setProCheckoutError((err as Error).message || "Unable to start Pro checkout.");
-    } finally {
-      setProCheckoutLoading(false);
-    }
+    await startProCheckout(createdSlug);
   };
 
   return (
@@ -362,7 +373,11 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
         disabled={loading}
         className="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3 rounded-lg transition disabled:opacity-50"
       >
-        {loading ? "Creating..." : "Create AI-Agent Readable Page"}
+        {loading
+          ? "Creating..."
+          : isProIntent
+            ? "Create page & continue to Pro checkout"
+            : "Create AI-Agent Readable Page"}
       </button>
     </form>
   );
