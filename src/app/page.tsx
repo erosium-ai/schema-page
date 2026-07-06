@@ -1,5 +1,6 @@
 import BuilderForm from "@/components/BuilderForm";
 import SchemaBadge from "@/components/SchemaBadge";
+import { Wrench, Coffee, BookOpen, ArrowRight } from "lucide-react";
 
 export default function Home() {
   return (
@@ -28,7 +29,34 @@ export default function Home() {
           <BuilderForm />
         </div>
 
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <section className="mt-16">
+          <h2 className="text-xl font-bold mb-6 text-center">See it in action</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <DemoCard
+              href="/demo/plumber"
+              icon={<Wrench className="h-6 w-6 text-orange-600" />}
+              name="Joe's Plumbing"
+              tagline="Blocked drains fixed today"
+              color="#e85d04"
+            />
+            <DemoCard
+              href="/demo/cafe"
+              icon={<Coffee className="h-6 w-6 text-amber-800" />}
+              name="Gold Coast Coffee House"
+              tagline="Best flat white in Broadbeach"
+              color="#6b4226"
+            />
+            <DemoCard
+              href="/demo/bookkeeper"
+              icon={<BookOpen className="h-6 w-6 text-blue-600" />}
+              name="Bright Bookkeeping"
+              tagline="Your books, sorted."
+              color="#2563eb"
+            />
+          </div>
+        </section>
+
+        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6">
           <FeatureCard
             title="Human Readable"
             description="Clean, modern landing pages that look great on every device."
@@ -53,5 +81,38 @@ function FeatureCard({ title, description }: { title: string; description: strin
       <h3 className="font-semibold mb-2">{title}</h3>
       <p className="text-sm text-gray-600">{description}</p>
     </div>
+  );
+}
+
+function DemoCard({
+  href,
+  icon,
+  name,
+  tagline,
+  color,
+}: {
+  href: string;
+  icon: React.ReactNode;
+  name: string;
+  tagline: string;
+  color: string;
+}) {
+  return (
+    <a
+      href={href}
+      className="group block bg-white rounded-xl border p-6 hover:shadow-md transition"
+    >
+      <div
+        className="inline-flex items-center justify-center w-12 h-12 rounded-lg mb-4"
+        style={{ backgroundColor: `${color}15` }}
+      >
+        {icon}
+      </div>
+      <h3 className="font-semibold mb-1">{name}</h3>
+      <p className="text-sm text-gray-600 mb-4">{tagline}</p>
+      <span className="inline-flex items-center gap-1 text-sm font-semibold text-brand-600 group-hover:underline">
+        View Demo <ArrowRight className="h-4 w-4" />
+      </span>
+    </a>
   );
 }
