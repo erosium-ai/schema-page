@@ -78,7 +78,7 @@ export default function PageShell({
           </div>
 
           <section className="mb-8 rounded-xl border bg-gray-50 p-5">
-            <h2 className="text-lg font-bold mb-2 text-gray-900">Quick summary</h2>
+            <h2 className="text-lg font-bold mb-2 text-gray-900">What your customers will see</h2>
             <p className="text-gray-700">{quickSummary}</p>
           </section>
 
