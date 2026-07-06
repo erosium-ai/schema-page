@@ -20,9 +20,19 @@ export default function PageShell({
   const showDemoBanner = isDemoAllowlistEnabled();
   const isPro = !!page.is_pro;
   const description = page.description?.trim() || "";
+  const freeDescriptionPreviewChars = 220;
+  const freeServiceLimit = 3;
   const hasContact = Boolean(
     page.contact_email || page.contact_phone || page.website_url || page.location_address
   );
+  const services = page.services || [];
+  const visibleServices = isPro ? services : services.slice(0, freeServiceLimit);
+  const hasHiddenServices = !isPro && services.length > freeServiceLimit;
+  const displayDescription =
+    !isPro && description.length > freeDescriptionPreviewChars
+      ? `${description.slice(0, freeDescriptionPreviewChars).trimEnd()}...`
+      : description;
+  const hasTruncatedDescription = !isPro && displayDescription !== description;
 
   const summaryParts: string[] = [];
   if (page.tagline) summaryParts.push(page.tagline);
@@ -54,7 +64,7 @@ export default function PageShell({
         <div className="max-w-3xl mx-auto px-4 py-6 flex items-center justify-between">
           <div>
             <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-              SchemaPage Business Card
+              {isPro ? "Business Page" : "SchemaPage Business Card"}
             </span>
           </div>
           {isPro ? (
@@ -90,17 +100,22 @@ export default function PageShell({
                   View description
                 </summary>
                 <p className="text-gray-700 text-base mt-3 whitespace-pre-wrap">
-                  {description}
+                  {displayDescription}
                 </p>
+                {hasTruncatedDescription && (
+                  <p className="text-xs text-gray-500 mt-3">
+                    Free preview shown. Upgrade to Pro to show your full description.
+                  </p>
+                )}
               </details>
             </section>
           )}
 
-          {page.services && page.services.length > 0 && (
+          {services.length > 0 && (
             <section className="mb-8">
               <h2 className="text-lg font-bold mb-4 text-gray-900">Services</h2>
               <div className="space-y-4">
-                {page.services.map((s, i) => (
+                {visibleServices.map((s, i) => (
                   <div
                     key={i}
                     className="flex items-start justify-between rounded-lg border p-4"
@@ -127,6 +142,46 @@ export default function PageShell({
                     )}
                   </div>
                 ))}
+              </div>
+              {hasHiddenServices && (
+                <p className="text-xs text-gray-500 mt-3">
+                  Showing {freeServiceLimit} of {services.length} services on Free. Upgrade to
+                  Pro to show all services.
+                </p>
+              )}
+            </section>
+          )}
+
+          {isPro && hasContact && (
+            <section className="mb-8 rounded-xl border bg-emerald-50/60 p-5">
+              <h2 className="text-lg font-bold mb-3 text-gray-900">Contact now</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {page.contact_phone && (
+                  <a
+                    href={`tel:${page.contact_phone}`}
+                    className="inline-flex items-center justify-center rounded-lg bg-brand-600 text-white font-semibold py-2.5 px-3 hover:bg-brand-700 transition"
+                  >
+                    Call
+                  </a>
+                )}
+                {page.contact_email && (
+                  <a
+                    href={`mailto:${page.contact_email}`}
+                    className="inline-flex items-center justify-center rounded-lg border border-brand-600 text-brand-700 font-semibold py-2.5 px-3 hover:bg-brand-50 transition"
+                  >
+                    Email
+                  </a>
+                )}
+                {page.website_url && (
+                  <a
+                    href={page.website_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center rounded-lg border border-gray-300 text-gray-700 font-semibold py-2.5 px-3 hover:bg-gray-100 transition"
+                  >
+                    Visit website
+                  </a>
+                )}
               </div>
             </section>
           )}
@@ -220,11 +275,11 @@ export default function PageShell({
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-brand-600 mt-0.5">✓</span>
-                    Upgrade this page to Pro
+                    Show full description and all services
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-brand-600 mt-0.5">✓</span>
-                    Priority support
+                    Premium contact action buttons
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-brand-600 mt-0.5">✓</span>
@@ -245,11 +300,17 @@ export default function PageShell({
 
       <footer className="border-t bg-white">
         <div className="max-w-3xl mx-auto px-4 py-6 text-center text-xs text-gray-500">
-          Built with{" "}
-          <a href="/" className="text-brand-600 hover:underline">
-            SchemaPage
-          </a>{" "}
-          — AI-Agent readable business pages.
+          {isPro ? (
+            "Professional business page"
+          ) : (
+            <>
+              Built with{" "}
+              <a href="/" className="text-brand-600 hover:underline">
+                SchemaPage
+              </a>{" "}
+              — AI-Agent readable business pages.
+            </>
+          )}
         </div>
       </footer>
     </div>
