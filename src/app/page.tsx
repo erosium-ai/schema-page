@@ -24,6 +24,9 @@ export default function Home() {
               with structured Schema.org markup that AI agents can read and
               understand.
             </p>
+            <p className="mt-3 rounded-lg border border-brand-200 bg-brand-50 px-4 py-3 text-sm font-medium text-brand-900">
+              Our goal: help get your business to the top of AI searches like ChatGPT, Gemini, Grok, and Claude.
+            </p>
           </div>
 
           <BuilderForm />
