@@ -98,7 +98,9 @@ export default function BuilderForm({ onPageCreated }: BuilderFormProps) {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">Your page link *</label>
+          <label className="block text-sm font-medium mb-1">
+            Your page name * <span className="font-normal text-gray-600">(enter business or webpage name)</span>
+          </label>
           <input
             name="slug"
             required
@@ -114,8 +116,11 @@ export default function BuilderForm({ onPageCreated }: BuilderFormProps) {
             placeholder="joes-plumbing"
           />
           <p className="text-xs text-gray-500 mt-1">
-            We'll suggest this from your business name. You can change it. Example:
+            We'll suggest this from your business name. You can change it anytime. Example:
             <span className="font-medium"> /joes-plumbing</span>
+          </p>
+          <p className="text-xs text-gray-500 mt-1">
+            Preview: <span className="font-medium">/{slugValue || "your-business-name"}</span>
           </p>
         </div>
       </div>
