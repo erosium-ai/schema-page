@@ -20,7 +20,6 @@ export default function PageShell({
   const showDemoBanner = isDemoAllowlistEnabled();
   const isPro = !!page.is_pro;
   const description = page.description?.trim() || "";
-  const isLongDescription = description.length > 180;
   const hasContact = Boolean(
     page.contact_email || page.contact_phone || page.website_url || page.location_address
   );
@@ -86,18 +85,14 @@ export default function PageShell({
           {description && (
             <section className="mb-8">
               <h2 className="text-lg font-bold mb-3 text-gray-900">Description</h2>
-              {isLongDescription ? (
-                <details className="rounded-lg border bg-gray-50 p-4">
-                  <summary className="cursor-pointer text-sm font-semibold text-brand-600">
-                    View description
-                  </summary>
-                  <p className="text-gray-700 text-base mt-3 whitespace-pre-wrap">
-                    {description}
-                  </p>
-                </details>
-              ) : (
-                <p className="text-gray-700 text-lg">{description}</p>
-              )}
+              <details className="rounded-lg border bg-gray-50 p-4">
+                <summary className="cursor-pointer text-sm font-semibold text-brand-600">
+                  View description
+                </summary>
+                <p className="text-gray-700 text-base mt-3 whitespace-pre-wrap">
+                  {description}
+                </p>
+              </details>
             </section>
           )}
 
