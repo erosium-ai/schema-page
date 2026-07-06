@@ -22,6 +22,11 @@ export default function BuilderForm({ onPageCreated }: BuilderFormProps) {
     process.env.NEXT_PUBLIC_TRUSTBADGE_URL ||
     "https://trustbadge-production-018a.up.railway.app";
 
+  const trackingSource = "schemapage";
+  const trackingCampaign = "post_create_upsell";
+  const trackingMedium = "in_app";
+  const trackingContent = "success_state_block";
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
@@ -273,7 +278,15 @@ export default function BuilderForm({ onPageCreated }: BuilderFormProps) {
                   View my live page
                 </a>
                 <a
-                  href={`${credentialsAiBaseUrl}/auth/register?source=schemapage&slug=${encodeURIComponent(createdSlug)}`}
+                  href={`${credentialsAiBaseUrl}/auth/register?${new URLSearchParams({
+                    source: trackingSource,
+                    slug: createdSlug,
+                    campaign: trackingCampaign,
+                    utm_source: trackingSource,
+                    utm_medium: trackingMedium,
+                    utm_campaign: trackingCampaign,
+                    utm_content: trackingContent,
+                  }).toString()}`}
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex items-center justify-center rounded-lg border border-brand-600 bg-white px-4 py-2.5 text-sm font-semibold text-brand-700 hover:bg-brand-50 transition"
