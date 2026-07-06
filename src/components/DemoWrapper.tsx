@@ -9,7 +9,7 @@ export default function DemoWrapper({ page }: { page: PageData }) {
   return (
     <>
       {showDemoBanner && <DemoBanner />}
-      <PageShell page={page} />
+      <PageShell page={page} demoSafeMode />
     </>
   );
 }

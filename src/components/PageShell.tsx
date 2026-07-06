@@ -12,9 +12,11 @@ import { Sparkles } from "lucide-react";
 export default function PageShell({
   page,
   downloadSection,
+  demoSafeMode = false,
 }: {
   page: PageData;
   downloadSection?: React.ReactNode | JSX.Element;
+  demoSafeMode?: boolean;
 }) {
   const schema = generateSchemaMarkup(page);
   const showDemoBanner = isDemoAllowlistEnabled();
@@ -157,30 +159,48 @@ export default function PageShell({
               <h2 className="text-lg font-bold mb-3 text-gray-900">Contact now</h2>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {page.contact_phone && (
-                  <a
-                    href={`tel:${page.contact_phone}`}
-                    className="inline-flex items-center justify-center rounded-lg bg-brand-600 text-white font-semibold py-2.5 px-3 hover:bg-brand-700 transition"
-                  >
-                    Call
-                  </a>
+                  demoSafeMode ? (
+                    <span className="inline-flex items-center justify-center rounded-lg bg-gray-200 text-gray-600 font-semibold py-2.5 px-3 cursor-not-allowed">
+                      Call (demo)
+                    </span>
+                  ) : (
+                    <a
+                      href={`tel:${page.contact_phone}`}
+                      className="inline-flex items-center justify-center rounded-lg bg-brand-600 text-white font-semibold py-2.5 px-3 hover:bg-brand-700 transition"
+                    >
+                      Call
+                    </a>
+                  )
                 )}
                 {page.contact_email && (
-                  <a
-                    href={`mailto:${page.contact_email}`}
-                    className="inline-flex items-center justify-center rounded-lg border border-brand-600 text-brand-700 font-semibold py-2.5 px-3 hover:bg-brand-50 transition"
-                  >
-                    Email
-                  </a>
+                  demoSafeMode ? (
+                    <span className="inline-flex items-center justify-center rounded-lg border border-gray-300 text-gray-600 font-semibold py-2.5 px-3 cursor-not-allowed bg-white">
+                      Email (demo)
+                    </span>
+                  ) : (
+                    <a
+                      href={`mailto:${page.contact_email}`}
+                      className="inline-flex items-center justify-center rounded-lg border border-brand-600 text-brand-700 font-semibold py-2.5 px-3 hover:bg-brand-50 transition"
+                    >
+                      Email
+                    </a>
+                  )
                 )}
                 {page.website_url && (
-                  <a
-                    href={page.website_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center rounded-lg border border-gray-300 text-gray-700 font-semibold py-2.5 px-3 hover:bg-gray-100 transition"
-                  >
-                    Visit website
-                  </a>
+                  demoSafeMode ? (
+                    <span className="inline-flex items-center justify-center rounded-lg border border-gray-300 text-gray-600 font-semibold py-2.5 px-3 cursor-not-allowed bg-white">
+                      Visit website (demo)
+                    </span>
+                  ) : (
+                    <a
+                      href={page.website_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center rounded-lg border border-gray-300 text-gray-700 font-semibold py-2.5 px-3 hover:bg-gray-100 transition"
+                    >
+                      Visit website
+                    </a>
+                  )
                 )}
               </div>
             </section>
@@ -191,30 +211,48 @@ export default function PageShell({
             {hasContact ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {page.contact_email && (
-                  <a
-                    href={`mailto:${page.contact_email}`}
-                    className="flex items-center gap-2 text-brand-600 hover:underline"
-                  >
-                    📧 {page.contact_email}
-                  </a>
+                  demoSafeMode ? (
+                    <p className="flex items-center gap-2 text-gray-700">
+                      📧 [hidden email in demo]
+                    </p>
+                  ) : (
+                    <a
+                      href={`mailto:${page.contact_email}`}
+                      className="flex items-center gap-2 text-brand-600 hover:underline"
+                    >
+                      📧 {page.contact_email}
+                    </a>
+                  )
                 )}
                 {page.contact_phone && (
-                  <a
-                    href={`tel:${page.contact_phone}`}
-                    className="flex items-center gap-2 text-brand-600 hover:underline"
-                  >
-                    📞 {page.contact_phone}
-                  </a>
+                  demoSafeMode ? (
+                    <p className="flex items-center gap-2 text-gray-700">
+                      📞 [hidden phone in demo]
+                    </p>
+                  ) : (
+                    <a
+                      href={`tel:${page.contact_phone}`}
+                      className="flex items-center gap-2 text-brand-600 hover:underline"
+                    >
+                      📞 {page.contact_phone}
+                    </a>
+                  )
                 )}
                 {page.website_url && (
-                  <a
-                    href={page.website_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-brand-600 hover:underline"
-                  >
-                    🌐 {page.website_url.replace(/^https?:\/\//, "")}
-                  </a>
+                  demoSafeMode ? (
+                    <p className="flex items-center gap-2 text-gray-700">
+                      🌐 [hidden website in demo]
+                    </p>
+                  ) : (
+                    <a
+                      href={page.website_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-brand-600 hover:underline"
+                    >
+                      🌐 {page.website_url.replace(/^https?:\/\//, "")}
+                    </a>
+                  )
                 )}
                 {page.location_address && (
                   <p className="flex items-center gap-2 text-gray-700">
