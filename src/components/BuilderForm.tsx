@@ -112,15 +112,19 @@ export default function BuilderForm({ onPageCreated }: BuilderFormProps) {
               setSlugEditedManually(true);
               setSlugValue(sanitizeSlug(e.currentTarget.value));
             }}
-            className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
+            className="w-full border rounded-lg px-3 py-2 text-brand-600 font-medium placeholder:text-brand-600/70 focus:outline-none focus:ring-2 focus:ring-brand-500"
             placeholder="joes-plumbing"
           />
           <p className="text-xs text-gray-500 mt-1">
-            We'll suggest this from your business name. You can change it anytime. Example:
-            <span className="font-medium"> /joes-plumbing</span>
+            We suggest you use your business name. You can change it any time.
           </p>
           <p className="text-xs text-gray-500 mt-1">
-            Preview: <span className="font-medium">/{slugValue || "your-business-name"}</span>
+            Example: <span className="font-medium">www.schemapage.com/</span>
+            <span className="font-semibold text-brand-600">joes-plumbing</span>
+          </p>
+          <p className="text-xs text-gray-500 mt-1">
+            Preview: <span className="font-medium">www.schemapage.com/</span>
+            <span className="font-semibold text-brand-600">{slugValue || "your-business-name"}</span>
           </p>
         </div>
       </div>
