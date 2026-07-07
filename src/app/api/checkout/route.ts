@@ -27,16 +27,19 @@ export async function POST(req: NextRequest) {
     const cancelUrl = `${siteUrl}/${page.slug}?checkout=cancelled`;
 
     const session = await stripe.checkout.sessions.create({
-      mode: "payment",
+      mode: "subscription",
       line_items: [
         {
           price_data: {
             currency: "aud",
-            product_data: {
-              name: "SchemaPage Pro Upgrade",
-              description: `Pro upgrade for ${page.business_name}`,
+            recurring: {
+              interval: "month",
             },
-            unit_amount: 2900,
+            product_data: {
+              name: "Pro AI Presence",
+              description: `Pro AI Presence subscription for ${page.business_name}`,
+            },
+            unit_amount: 1900,
           },
           quantity: 1,
         },

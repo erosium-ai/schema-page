@@ -34,29 +34,8 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
   const startProCheckout = async (slug: string): Promise<boolean> => {
     setProCheckoutLoading(true);
     setProCheckoutError(null);
-
-    try {
-      const response = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slug }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok || !data.success || !data.url) {
-        setProCheckoutError(data.error || "Unable to start Pro checkout. Please try again.");
-        return false;
-      }
-
-      window.location.href = data.url;
-      return true;
-    } catch (err) {
-      setProCheckoutError((err as Error).message || "Unable to start Pro checkout.");
-      return false;
-    } finally {
-      setProCheckoutLoading(false);
-    }
+    window.location.href = `/checkout/pro/${encodeURIComponent(slug)}`;
+    return true;
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

@@ -14,27 +14,7 @@ export default function UpgradeButton({ slug }: UpgradeButtonProps) {
   const handleUpgrade = async () => {
     setLoading(true);
     setError(null);
-
-    try {
-      const response = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slug }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok || !data.success || !data.url) {
-        setError(data.error || "Unable to start checkout. Please try again.");
-        return;
-      }
-
-      window.location.href = data.url;
-    } catch (err) {
-      setError((err as Error).message || "Something went wrong. Please try again.");
-    } finally {
-      setLoading(false);
-    }
+    window.location.href = `/checkout/pro/${encodeURIComponent(slug)}`;
   };
 
   return (
@@ -49,7 +29,7 @@ export default function UpgradeButton({ slug }: UpgradeButtonProps) {
         ) : (
           <Sparkles className="h-5 w-5" />
         )}
-        {loading ? "Opening checkout..." : "Upgrade to Pro — $29"}
+        {loading ? "Opening checkout..." : "Upgrade to Pro AI Presence — $19/month"}
       </button>
 
       {error && (

@@ -301,23 +301,43 @@ export default function PageShell({
               <div className="space-y-4">
                 <div className="inline-flex items-center gap-1.5 text-brand-600 font-semibold text-sm">
                   <Sparkles className="h-4 w-4" />
-                  SchemaPage Pro
+                  Pro AI Presence
                 </div>
                 <h2 className="text-2xl font-extrabold text-gray-900">
-                  Unlock SchemaPage Pro
+                  Upgrade to Pro AI Presence
                 </h2>
                 <ul className="space-y-2 text-gray-700">
                   <li className="flex items-start gap-2">
                     <span className="text-brand-600 mt-0.5">✓</span>
-                    Remove SchemaPage branding
+                    Enhanced AI-readable business page
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-brand-600 mt-0.5">✓</span>
-                    Show full description and all services
+                    Structured data built for ChatGPT, Gemini, Grok, Claude, and Google
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-brand-600 mt-0.5">✓</span>
-                    Premium contact action buttons
+                    Service area + category optimisation
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-brand-600 mt-0.5">✓</span>
+                    FAQ section written for AI/search answers
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-brand-600 mt-0.5">✓</span>
+                    Click-to-call / website / social links
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-brand-600 mt-0.5">✓</span>
+                    Priority updates when business details change
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-brand-600 mt-0.5">✓</span>
+                    QR-code-ready page link
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-brand-600 mt-0.5">✓</span>
+                    Basic conversion tracking
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-brand-600 mt-0.5">✓</span>
@@ -325,7 +345,7 @@ export default function PageShell({
                   </li>
                 </ul>
                 <p className="text-lg font-semibold text-gray-900">
-                  $29 AUD <span className="text-sm font-normal text-gray-500">— one-time payment</span>
+                  $19 AUD <span className="text-sm font-normal text-gray-500">/ month subscription</span>
                 </p>
               </div>
               <div className="shrink-0">

@@ -40,7 +40,7 @@ export default function CheckoutStatusBanner() {
       </span>
       <p className="text-sm font-medium flex-1">
         {isSuccess
-          ? "Payment successful! Your page is now Pro. It may take a few seconds to update."
+          ? "Payment successful! Your Pro AI Presence subscription is active. It may take a few seconds to update."
           : "Payment cancelled — no charge. Try again anytime."}
       </p>
       <button
