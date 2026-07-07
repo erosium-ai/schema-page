@@ -9,6 +9,16 @@ interface BuilderFormProps {
   intent?: "free" | "pro";
 }
 
+const PRO_AI_PRESENCE_BENEFITS = [
+  "Enhanced AI-readable business page",
+  "Structured data built for ChatGPT, Gemini, Grok, Claude, and Google",
+  "Service area + category optimisation",
+  "FAQ section written for AI/search answers",
+  "Click-to-call / website / social links",
+  "QR-code-ready page link",
+  "Basic conversion tracking",
+];
+
 export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderFormProps) {
   const [serviceCount, setServiceCount] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -358,6 +368,22 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
             ? "Create page & continue to Pro checkout"
             : "Create AI-Agent Readable Page"}
       </button>
+
+      {isProIntent && (
+        <div className="rounded-xl border-2 border-sky-300 bg-sky-100 px-4 py-4 text-slate-900 shadow-sm">
+          <p className="text-sm font-extrabold text-sky-950">
+            Pro AI Presence includes:
+          </p>
+          <div className="mt-3 grid gap-2 text-sm leading-relaxed sm:grid-cols-2">
+            {PRO_AI_PRESENCE_BENEFITS.map((benefit) => (
+              <p key={benefit} className="flex items-start gap-2">
+                <span className="mt-0.5 font-bold text-sky-700">✓</span>
+                <span>{benefit}</span>
+              </p>
+            ))}
+          </div>
+        </div>
+      )}
     </form>
   );
 }

@@ -65,8 +65,16 @@ export default function PageShell({
       <header className="bg-white border-b">
         <div className="max-w-3xl mx-auto px-4 py-6 flex items-center justify-between">
           <div>
-            <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-              {isPro ? "Business Page" : "SchemaPage Business Card"}
+            <span
+              className={
+                isPro
+                  ? "text-lg font-extrabold leading-tight text-gray-900 sm:text-xl"
+                  : "text-xs font-semibold text-gray-500 uppercase tracking-wider"
+              }
+            >
+              {isPro
+                ? "This is my paid Pro AI page that now lives on the internet."
+                : "SchemaPage Business Card"}
             </span>
           </div>
           {isPro ? (
