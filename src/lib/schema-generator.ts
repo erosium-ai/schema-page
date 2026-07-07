@@ -23,7 +23,7 @@ export function generateSchemaMarkup(page: PageData): SchemaMarkup {
       ? Object.values(page.social_links).filter(Boolean)
       : undefined,
     hasPart:
-      faqs.length > 0
+      page.is_pro && faqs.length > 0
         ? {
             "@type": "FAQPage",
             mainEntity: faqs.map((faq) => ({
