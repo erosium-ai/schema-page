@@ -109,6 +109,7 @@ export async function POST(req: NextRequest) {
     const tagline = String(body.tagline || "").trim().slice(0, 160) || null;
     const description = String(body.description || "").trim().slice(0, 4000) || null;
     const contactEmail = String(body.contact_email || "").trim() || null;
+    const creatorEmail = String(body.creator_email || "").trim() || null;
     const contactPhone = String(body.contact_phone || "").trim().slice(0, 40) || null;
     const websiteUrl = String(body.website_url || "").trim() || null;
     const locationAddress = String(body.location_address || "").trim().slice(0, 240) || null;
@@ -153,6 +154,13 @@ export async function POST(req: NextRequest) {
       })
       .filter((faq) => faq.question.length > 0 && faq.answer.length > 0)
       .slice(0, 8);
+
+    if (creatorEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(creatorEmail)) {
+      return NextResponse.json(
+        { success: false, error: "Invalid creator_email" },
+        { status: 400 }
+      );
+    }
 
     if (contactEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail)) {
       return NextResponse.json(
@@ -211,23 +219,41 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { data, error } = await adminClient.from("pages")
-      .insert({
-        slug,
-        business_name: businessName,
-        tagline,
-        description,
-        services,
-        contact_email: contactEmail,
-        contact_phone: contactPhone,
-        website_url: websiteUrl,
-        location_address: locationAddress,
-        social_links: socialLinks,
-        metadata: faqs.length > 0 ? { faqs } : {},
-        brand_color: brandColor,
-      })
+    const pagePayload: Record<string, unknown> = {
+      slug,
+      business_name: businessName,
+      tagline,
+      description,
+      services,
+      contact_email: contactEmail,
+      contact_phone: contactPhone,
+      website_url: websiteUrl,
+      location_address: locationAddress,
+      social_links: socialLinks,
+      metadata: faqs.length > 0 ? { faqs } : {},
+      brand_color: brandColor,
+    };
+
+    if (creatorEmail) {
+      pagePayload.creator_email = creatorEmail;
+    }
+
+    let insertResult = await adminClient.from("pages")
+      .insert(pagePayload)
       .select()
       .single();
+
+    // Fallback: if creator_email column doesn't exist yet (migration not applied),
+    // retry without it so the page still gets created.
+    if (insertResult.error && insertResult.error.message?.includes("creator_email")) {
+      delete pagePayload.creator_email;
+      insertResult = await adminClient.from("pages")
+        .insert(pagePayload)
+        .select()
+        .single();
+    }
+
+    const { data, error } = insertResult;
 
     if (error) {
       const status = error.code === "23505" ? 409 : 500;

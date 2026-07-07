@@ -35,6 +35,7 @@ export interface PageData {
   metadata?: PageMetadata;
   brand_color?: string;
   brand_colour?: string;
+  creator_email?: string;
   is_pro?: boolean;
   created_at?: string;
   updated_at?: string;

@@ -93,6 +93,7 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
       tagline: (formData.get("tagline") as string)?.trim() || undefined,
       description: (formData.get("description") as string)?.trim() || undefined,
       services: services.length > 0 ? services : undefined,
+      creator_email: (formData.get("creator_email") as string)?.trim() || undefined,
       contact_email: (formData.get("contact_email") as string)?.trim() || undefined,
       contact_phone: (formData.get("contact_phone") as string)?.trim() || undefined,
       website_url: (formData.get("website_url") as string)?.trim() || undefined,
@@ -169,6 +170,20 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
           />
         </div>
         <div>
+          <label className="block text-sm font-medium mb-1">Your Email *</label>
+          <input
+            name="creator_email"
+            type="email"
+            required
+            className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
+            placeholder="you@example.com"
+          />
+          <p className="text-xs text-gray-500 mt-1">
+            We&apos;ll use this to follow up with page tips and upgrade offers. We won&apos;t share it.
+          </p>
+        </div>
+      </div>
+        <div>
           <label className="block text-sm font-medium mb-1">
             Your page name * <span className="font-normal text-gray-600">(enter business or webpage name)</span>
           </label>
@@ -198,7 +213,6 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
             <span className="font-semibold text-brand-600">{slugValue || "your-business-name"}</span>
           </p>
         </div>
-      </div>
 
       <section className="rounded-xl border border-sky-200 bg-sky-50/60 p-4">
         <h3 className="text-sm font-bold text-sky-900">Pro-ready social links</h3>

@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS pages (
   location_address text,
   social_links jsonb DEFAULT '{}'::jsonb,
   brand_color text DEFAULT '#22c55e',
+  creator_email text,
   is_pro BOOLEAN NOT NULL DEFAULT FALSE,
   metadata jsonb DEFAULT '{}'::jsonb,
   created_at timestamptz DEFAULT now(),
