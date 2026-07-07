@@ -412,47 +412,79 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
 
           {createdSlug && (
             <div className="rounded-xl border border-brand-200 bg-brand-50/40 p-4 sm:p-5">
-              <p className="text-sm font-semibold text-brand-800">Next step: turn this into a full trust + conversion funnel</p>
-              <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <a
-                  href={`/${createdSlug}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center justify-center rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-700 transition"
-                >
-                  View my live page
-                </a>
+              <p className="text-sm font-semibold text-brand-800">
+                🚀 Your page is live — now turn it into a customer magnet
+              </p>
+              <p className="mt-1 text-xs text-brand-700/80">
+                Gold Coast businesses using Pro AI Presence + TrustBadge are getting found by customers searching ChatGPT, Gemini & Google.
+              </p>
+
+              <div className="mt-4 space-y-3">
                 <button
                   type="button"
                   onClick={handleStartProCheckout}
                   disabled={proCheckoutLoading}
-                  className="inline-flex items-center justify-center rounded-lg border border-brand-600 bg-white px-4 py-2.5 text-sm font-semibold text-brand-700 hover:bg-brand-50 transition disabled:opacity-60"
+                  className="w-full inline-flex items-center justify-center rounded-lg bg-brand-600 px-5 py-3 text-sm font-bold text-white hover:bg-brand-700 transition shadow-sm disabled:opacity-60"
                 >
-                  {proCheckoutLoading ? "Opening Pro checkout..." : "Start Pro AI Presence"}
+                  {proCheckoutLoading ? "Opening Pro checkout..." : "Upgrade to Pro AI Presence — $19/mo"}
                 </button>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <a
+                    href={`/${createdSlug}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition"
+                  >
+                    View my page
+                  </a>
+                  <a
+                    href={`${credentialsAiBaseUrl}/auth/register?${new URLSearchParams({
+                      source: trackingSource,
+                      slug: createdSlug,
+                      campaign: trackingCampaign,
+                      utm_source: trackingSource,
+                      utm_medium: trackingMedium,
+                      utm_campaign: trackingCampaign,
+                      utm_content: trackingContent,
+                    }).toString()}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition"
+                  >
+                    Get TrustBadge
+                  </a>
+                </div>
+              </div>
+
+              {proCheckoutError && (
+                <p className="mt-2 text-xs text-red-700">{proCheckoutError}</p>
+              )}
+
+              <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50/60 p-3">
+                <p className="text-xs font-bold text-amber-900">
+                  🔥 Founder Bundle — $39/mo (first 100 businesses)
+                </p>
+                <p className="mt-1 text-xs text-amber-800">
+                  Pro AI Presence + 1 TrustBadge + up to 3 verified credentials. Everything you need to dominate AI search.
+                </p>
                 <a
                   href={`${credentialsAiBaseUrl}/auth/register?${new URLSearchParams({
                     source: trackingSource,
                     slug: createdSlug,
-                    campaign: trackingCampaign,
+                    campaign: "founder_bundle",
                     utm_source: trackingSource,
                     utm_medium: trackingMedium,
-                    utm_campaign: trackingCampaign,
-                    utm_content: trackingContent,
+                    utm_campaign: "founder_bundle",
+                    utm_content: "post_create_banner",
                   }).toString()}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center justify-center rounded-lg border border-brand-600 bg-white px-4 py-2.5 text-sm font-semibold text-brand-700 hover:bg-brand-50 transition"
+                  className="mt-2 inline-block text-xs font-semibold text-amber-900 underline hover:text-amber-950"
                 >
-                  Get TrustBadge verification
+                  Claim your founder spot →
                 </a>
               </div>
-              {proCheckoutError && (
-                <p className="mt-2 text-xs text-red-700">{proCheckoutError}</p>
-              )}
-              <p className="mt-3 text-xs text-brand-900/80">
-                Pro AI Presence <span className="font-semibold">$19/mo</span> + TrustBadge verification gives you stronger trust signals for customers and AI agents.
-              </p>
             </div>
           )}
         </div>
