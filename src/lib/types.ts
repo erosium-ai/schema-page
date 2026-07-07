@@ -11,6 +11,15 @@ export interface SocialLinks {
   linkedin?: string;
 }
 
+export interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+export interface PageMetadata {
+  faqs?: FaqItem[];
+}
+
 export interface PageData {
   id?: string;
   slug: string;
@@ -23,6 +32,7 @@ export interface PageData {
   website_url?: string;
   location_address?: string;
   social_links?: SocialLinks;
+  metadata?: PageMetadata;
   brand_color?: string;
   brand_colour?: string;
   is_pro?: boolean;

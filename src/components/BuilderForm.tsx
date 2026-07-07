@@ -21,6 +21,7 @@ const PRO_AI_PRESENCE_BENEFITS = [
 
 export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderFormProps) {
   const [serviceCount, setServiceCount] = useState(1);
+  const [faqCount, setFaqCount] = useState(2);
   const [loading, setLoading] = useState(false);
   const [proCheckoutLoading, setProCheckoutLoading] = useState(false);
   const [proCheckoutError, setProCheckoutError] = useState<string | null>(null);
@@ -70,6 +71,22 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
       }
     }
 
+    const faqs: Array<{ question: string; answer: string }> = [];
+    for (let i = 0; i < faqCount; i++) {
+      const question = String(formData.get(`faq_question_${i}`) || "").trim();
+      const answer = String(formData.get(`faq_answer_${i}`) || "").trim();
+      if (question && answer) {
+        faqs.push({ question, answer });
+      }
+    }
+
+    const socialLinks = {
+      facebook: String(formData.get("social_facebook") || "").trim() || undefined,
+      instagram: String(formData.get("social_instagram") || "").trim() || undefined,
+      linkedin: String(formData.get("social_linkedin") || "").trim() || undefined,
+      twitter: String(formData.get("social_twitter") || "").trim() || undefined,
+    };
+
     const payload = {
       slug: sanitizeSlug(slugValue || String(formData.get("slug") || "")),
       business_name: (formData.get("business_name") as string).trim(),
@@ -80,6 +97,8 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
       contact_phone: (formData.get("contact_phone") as string)?.trim() || undefined,
       website_url: (formData.get("website_url") as string)?.trim() || undefined,
       location_address: (formData.get("location_address") as string)?.trim() || undefined,
+      social_links: socialLinks,
+      faqs,
       brand_color: (formData.get("brand_color") as string) || "#22c55e",
     };
 
@@ -105,6 +124,7 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
 
       form.reset();
       setServiceCount(1);
+      setFaqCount(2);
       setSlugValue("");
       setSlugEditedManually(false);
     } catch (err) {
@@ -179,6 +199,73 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
           </p>
         </div>
       </div>
+
+      <section className="rounded-xl border border-sky-200 bg-sky-50/60 p-4">
+        <h3 className="text-sm font-bold text-sky-900">Pro-ready social links</h3>
+        <p className="mt-1 text-xs text-sky-800">
+          These power your Pro social/contact visibility block.
+        </p>
+        <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3">
+          <input
+            name="social_facebook"
+            type="url"
+            className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
+            placeholder="https://facebook.com/yourbusiness"
+          />
+          <input
+            name="social_instagram"
+            type="url"
+            className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
+            placeholder="https://instagram.com/yourbusiness"
+          />
+          <input
+            name="social_linkedin"
+            type="url"
+            className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
+            placeholder="https://linkedin.com/company/yourbusiness"
+          />
+          <input
+            name="social_twitter"
+            type="url"
+            className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
+            placeholder="https://x.com/yourbusiness"
+          />
+        </div>
+      </section>
+
+      <section className="rounded-xl border border-violet-200 bg-violet-50/60 p-4">
+        <h3 className="text-sm font-bold text-violet-900">Pro-ready FAQ section</h3>
+        <p className="mt-1 text-xs text-violet-800">
+          Add answers customers and AI search tools ask for. Publish these on Pro pages.
+        </p>
+        <div className="mt-3 space-y-3">
+          {Array.from({ length: faqCount }).map((_, i) => (
+            <div key={i} className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <input
+                name={`faq_question_${i}`}
+                maxLength={180}
+                className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                placeholder="FAQ question"
+              />
+              <input
+                name={`faq_answer_${i}`}
+                maxLength={600}
+                className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                placeholder="Short answer"
+              />
+            </div>
+          ))}
+        </div>
+        {faqCount < 5 && (
+          <button
+            type="button"
+            onClick={() => setFaqCount((c) => c + 1)}
+            className="mt-3 text-sm text-violet-700 hover:text-violet-800 font-medium"
+          >
+            + Add another FAQ
+          </button>
+        )}
+      </section>
 
       <div>
         <label className="block text-sm font-medium mb-1">Tagline</label>

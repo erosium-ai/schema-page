@@ -7,7 +7,7 @@ import CheckoutStatusBanner from "@/components/CheckoutStatusBanner";
 import { isDemoAllowlistEnabled } from "@/lib/founder";
 import DemoBanner from "@/components/DemoBanner";
 import { JSX } from "react";
-import { Sparkles } from "lucide-react";
+import { Sparkles, Download } from "lucide-react";
 
 export default function PageShell({
   page,
@@ -28,6 +28,11 @@ export default function PageShell({
     page.contact_email || page.contact_phone || page.website_url || page.location_address
   );
   const services = page.services || [];
+  const faqs = Array.isArray(page.metadata?.faqs) ? page.metadata?.faqs || [] : [];
+  const socialLinks = page.social_links || {};
+  const hasSocialLinks = Boolean(
+    socialLinks.facebook || socialLinks.instagram || socialLinks.linkedin || socialLinks.twitter
+  );
   const visibleServices = isPro ? services : services.slice(0, freeServiceLimit);
   const hasHiddenServices = !isPro && services.length > freeServiceLimit;
   const displayDescription =
@@ -48,6 +53,9 @@ export default function PageShell({
   const quickSummary =
     summaryParts.join(" ") ||
     `${page.business_name} now has a live business page. Add more details when you're ready to make it even clearer for customers.`;
+
+  const publicPageUrl = `https://schemapage-production.up.railway.app/${page.slug}`;
+  const qrDownloadHref = `https://api.qrserver.com/v1/create-qr-code/?size=1024x1024&data=${encodeURIComponent(publicPageUrl)}`;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -163,7 +171,7 @@ export default function PageShell({
           )}
 
           {isPro && hasContact && (
-            <section className="mb-8 rounded-xl border bg-emerald-50/60 p-5">
+            <section className="mb-8 rounded-xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-cyan-50 p-5 shadow-sm">
               <h2 className="text-lg font-bold mb-3 text-gray-900">Contact now</h2>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {page.contact_phone && (
@@ -174,9 +182,9 @@ export default function PageShell({
                   ) : (
                     <a
                       href={`tel:${page.contact_phone}`}
-                      className="inline-flex items-center justify-center rounded-lg bg-brand-600 text-white font-semibold py-2.5 px-3 hover:bg-brand-700 transition"
+                      className="inline-flex items-center justify-center rounded-lg bg-brand-600 text-white font-bold py-3 px-4 hover:bg-brand-700 transition shadow"
                     >
-                      Call
+                      Call now
                     </a>
                   )
                 )}
@@ -188,9 +196,9 @@ export default function PageShell({
                   ) : (
                     <a
                       href={`mailto:${page.contact_email}`}
-                      className="inline-flex items-center justify-center rounded-lg border border-brand-600 text-brand-700 font-semibold py-2.5 px-3 hover:bg-brand-50 transition"
+                      className="inline-flex items-center justify-center rounded-lg border-2 border-brand-600 text-brand-700 font-bold py-3 px-4 hover:bg-brand-50 transition"
                     >
-                      Email
+                      Send email
                     </a>
                   )
                 )}
@@ -204,12 +212,95 @@ export default function PageShell({
                       href={page.website_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center rounded-lg border border-gray-300 text-gray-700 font-semibold py-2.5 px-3 hover:bg-gray-100 transition"
+                      className="inline-flex items-center justify-center rounded-lg border-2 border-gray-300 text-gray-700 font-bold py-3 px-4 hover:bg-gray-100 transition"
                     >
                       Visit website
                     </a>
                   )
                 )}
+              </div>
+            </section>
+          )}
+
+          {isPro && hasSocialLinks && (
+            <section className="mb-8 rounded-xl border border-sky-200 bg-sky-50/70 p-5">
+              <h2 className="text-lg font-bold mb-3 text-gray-900">Social links</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {socialLinks.facebook && (
+                  <a
+                    href={socialLinks.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center rounded-lg border border-sky-300 bg-white text-sky-700 font-semibold py-2.5 px-3 hover:bg-sky-100 transition"
+                  >
+                    Facebook
+                  </a>
+                )}
+                {socialLinks.instagram && (
+                  <a
+                    href={socialLinks.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center rounded-lg border border-sky-300 bg-white text-sky-700 font-semibold py-2.5 px-3 hover:bg-sky-100 transition"
+                  >
+                    Instagram
+                  </a>
+                )}
+                {socialLinks.linkedin && (
+                  <a
+                    href={socialLinks.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center rounded-lg border border-sky-300 bg-white text-sky-700 font-semibold py-2.5 px-3 hover:bg-sky-100 transition"
+                  >
+                    LinkedIn
+                  </a>
+                )}
+                {socialLinks.twitter && (
+                  <a
+                    href={socialLinks.twitter}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center rounded-lg border border-sky-300 bg-white text-sky-700 font-semibold py-2.5 px-3 hover:bg-sky-100 transition"
+                  >
+                    X / Twitter
+                  </a>
+                )}
+              </div>
+            </section>
+          )}
+
+          {isPro && (
+            <section className="mb-8 rounded-xl border border-violet-200 bg-violet-50/70 p-5">
+              <h2 className="text-lg font-bold mb-3 text-gray-900">QR code ready</h2>
+              <p className="text-sm text-gray-700 mb-4">
+                Download your QR code and put it on business cards, invoices, van stickers, and flyers.
+              </p>
+              <a
+                href={qrDownloadHref}
+                download={`${page.slug}-pro-ai-presence-qr.png`}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 rounded-lg bg-violet-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-violet-800 transition"
+              >
+                <Download className="h-4 w-4" />
+                Download QR code
+              </a>
+            </section>
+          )}
+
+          {isPro && faqs.length > 0 && (
+            <section className="mb-8 rounded-xl border border-indigo-200 bg-indigo-50/70 p-5">
+              <h2 className="text-lg font-bold mb-3 text-gray-900">Frequently asked questions</h2>
+              <div className="space-y-2">
+                {faqs.map((faq, index) => (
+                  <details key={`${faq.question}-${index}`} className="rounded-lg border bg-white p-3">
+                    <summary className="cursor-pointer text-sm font-semibold text-indigo-700">
+                      {faq.question}
+                    </summary>
+                    <p className="text-sm text-gray-700 mt-2 whitespace-pre-wrap">{faq.answer}</p>
+                  </details>
+                ))}
               </div>
             </section>
           )}

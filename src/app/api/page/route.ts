@@ -22,6 +22,18 @@ function getClientIp(req: NextRequest): string {
   return "unknown";
 }
 
+function sanitizeOptionalUrl(input: unknown): string | null {
+  const value = String(input || "").trim();
+  if (!value) return null;
+
+  const parsed = new URL(value);
+  if (!["http:", "https:"].includes(parsed.protocol)) {
+    throw new Error("Invalid URL protocol");
+  }
+
+  return value;
+}
+
 type AdminClient = NonNullable<ReturnType<typeof getAdminClient>>;
 
 async function checkRateLimit(
@@ -104,6 +116,44 @@ export async function POST(req: NextRequest) {
       ? String(body.brand_color)
       : "#22c55e";
 
+    const socialLinksInput =
+      body.social_links && typeof body.social_links === "object"
+        ? (body.social_links as Record<string, unknown>)
+        : {};
+
+    let socialLinks: {
+      facebook: string | null;
+      instagram: string | null;
+      linkedin: string | null;
+      twitter: string | null;
+    };
+
+    try {
+      socialLinks = {
+        facebook: socialLinksInput.facebook ? sanitizeOptionalUrl(socialLinksInput.facebook) : null,
+        instagram: socialLinksInput.instagram ? sanitizeOptionalUrl(socialLinksInput.instagram) : null,
+        linkedin: socialLinksInput.linkedin ? sanitizeOptionalUrl(socialLinksInput.linkedin) : null,
+        twitter: socialLinksInput.twitter ? sanitizeOptionalUrl(socialLinksInput.twitter) : null,
+      };
+    } catch {
+      return NextResponse.json(
+        { success: false, error: "Invalid social link URL (must start with http or https)" },
+        { status: 400 }
+      );
+    }
+
+    const faqsInput: unknown[] = Array.isArray(body.faqs) ? body.faqs : [];
+    const faqs = faqsInput
+      .map((item: unknown) => {
+        const faq = item as { question?: string; answer?: string };
+        return {
+          question: String(faq?.question || "").trim().slice(0, 180),
+          answer: String(faq?.answer || "").trim().slice(0, 600),
+        };
+      })
+      .filter((faq) => faq.question.length > 0 && faq.answer.length > 0)
+      .slice(0, 8);
+
     if (contactEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail)) {
       return NextResponse.json(
         { success: false, error: "Invalid contact_email" },
@@ -113,13 +163,7 @@ export async function POST(req: NextRequest) {
 
     if (websiteUrl) {
       try {
-        const parsed = new URL(websiteUrl);
-        if (!["http:", "https:"].includes(parsed.protocol)) {
-          return NextResponse.json(
-            { success: false, error: "website_url must be http or https" },
-            { status: 400 }
-          );
-        }
+        sanitizeOptionalUrl(websiteUrl);
       } catch {
         return NextResponse.json(
           { success: false, error: "Invalid website_url" },
@@ -178,6 +222,8 @@ export async function POST(req: NextRequest) {
         contact_phone: contactPhone,
         website_url: websiteUrl,
         location_address: locationAddress,
+        social_links: socialLinks,
+        metadata: faqs.length > 0 ? { faqs } : {},
         brand_color: brandColor,
       })
       .select()

@@ -1,6 +1,8 @@
 import { PageData, SchemaMarkup } from "./types";
 
 export function generateSchemaMarkup(page: PageData): SchemaMarkup {
+  const faqs = Array.isArray(page.metadata?.faqs) ? page.metadata?.faqs || [] : [];
+
   const ldJson: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
@@ -20,6 +22,20 @@ export function generateSchemaMarkup(page: PageData): SchemaMarkup {
     sameAs: page.social_links
       ? Object.values(page.social_links).filter(Boolean)
       : undefined,
+    hasPart:
+      faqs.length > 0
+        ? {
+            "@type": "FAQPage",
+            mainEntity: faqs.map((faq) => ({
+              "@type": "Question",
+              name: faq.question,
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: faq.answer,
+              },
+            })),
+          }
+        : undefined,
   };
 
   if (page.services && page.services.length > 0) {
