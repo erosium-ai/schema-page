@@ -14,7 +14,7 @@ export default function UpgradeButton({ slug }: UpgradeButtonProps) {
   const handleUpgrade = async () => {
     setLoading(true);
     setError(null);
-    window.location.href = `/checkout/pro/${encodeURIComponent(slug)}`;
+    window.location.href = `/checkout/founding/${encodeURIComponent(slug)}`;
   };
 
   return (
@@ -29,7 +29,7 @@ export default function UpgradeButton({ slug }: UpgradeButtonProps) {
         ) : (
           <Sparkles className="h-5 w-5" />
         )}
-        {loading ? "Opening checkout..." : "Upgrade to Pro AI Presence — $19/month"}
+        {loading ? "Opening checkout..." : "Claim Founding 50 — Verified Lead Engine $49/month"}
       </button>
 
       {error && (

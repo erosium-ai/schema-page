@@ -444,7 +444,7 @@ export default function PageShell({
                   </li>
                 </ul>
                 <p className="text-lg font-semibold text-gray-900">
-                  $19 AUD <span className="text-sm font-normal text-gray-500">/ month subscription</span>
+                  $49 AUD <span className="text-sm font-normal text-gray-500">/ month Founding 50 subscription</span>
                 </p>
               </div>
               <div className="shrink-0">

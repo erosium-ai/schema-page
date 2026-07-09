@@ -4,9 +4,15 @@ import { useState } from "react";
 
 interface StartProCheckoutButtonProps {
   slug: string;
+  plan?: "pro" | "verified_lead_engine";
+  label?: string;
 }
 
-export default function StartProCheckoutButton({ slug }: StartProCheckoutButtonProps) {
+export default function StartProCheckoutButton({
+  slug,
+  plan = "pro",
+  label = "Continue to secure payment",
+}: StartProCheckoutButtonProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -18,7 +24,7 @@ export default function StartProCheckoutButton({ slug }: StartProCheckoutButtonP
       const response = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slug }),
+        body: JSON.stringify({ slug, plan }),
       });
 
       const data = await response.json();
@@ -43,11 +49,10 @@ export default function StartProCheckoutButton({ slug }: StartProCheckoutButtonP
         disabled={loading}
         className="inline-flex items-center justify-center rounded-lg bg-brand-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-700 disabled:opacity-60"
       >
-        {loading ? "Opening secure payment..." : "Continue to secure payment"}
+        {loading ? "Opening secure payment..." : label}
       </button>
 
       {error && <p className="text-xs text-red-700">{error}</p>}
     </div>
   );
 }
-
