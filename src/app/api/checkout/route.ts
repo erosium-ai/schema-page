@@ -27,8 +27,21 @@ export async function POST(req: NextRequest) {
     }
 
     const siteUrl = process.env.SITE_URL || "https://schemapage.io";
-    const successUrl = `${siteUrl}/${page.slug}?checkout=success&plan=${planCopy.successPlan}`;
-    const cancelUrl = `${siteUrl}/${page.slug}?checkout=cancelled&plan=${planCopy.successPlan}`;
+    const credentialsAiDomain =
+      process.env.CREDENTIALS_AI_DOMAIN || "https://credentialsai.com.au";
+
+    // Founding Member (verified_lead_engine) checkouts now thread the customer
+    // straight into the Credentials AI /welcome flow so they land on a real
+    // dashboard instead of the SchemaPage builder page. Legacy `pro` checkouts
+    // keep the old success/cancel URLs.
+    const successUrl =
+      plan === "verified_lead_engine"
+        ? `${credentialsAiDomain}/welcome?session_id={CHECKOUT_SESSION_ID}`
+        : `${siteUrl}/${page.slug}?checkout=success&plan=${planCopy.successPlan}`;
+    const cancelUrl =
+      plan === "verified_lead_engine"
+        ? `${credentialsAiDomain}/pricing?checkout=cancelled`
+        : `${siteUrl}/${page.slug}?checkout=cancelled&plan=${planCopy.successPlan}`;
 
     let lineItem: Stripe.Checkout.SessionCreateParams.LineItem;
 
@@ -82,14 +95,24 @@ export async function POST(req: NextRequest) {
         slug: page.slug,
         plan,
         source: "schemapage_checkout",
+        product: "credentials_ai",
+        business_name: page.business_name,
       },
       subscription_data: {
         metadata: {
           slug: page.slug,
           plan,
           product: "credentials_ai",
+          business_name: page.business_name,
         },
       },
+      // Pre-fill the customer's email if we already know it. Stripe still
+      // lets them change it during checkout.
+      ...(page.creator_email
+        ? { customer_email: page.creator_email }
+        : page.contact_email
+          ? { customer_email: page.contact_email }
+          : {}),
     });
 
     if (!session.url) {
