@@ -18,7 +18,7 @@ const FOUNDER_BENEFITS = [
   "Instant lead alerts to the business owner",
   "Lead status tracking from new to contacted, quoted, won, lost, or spam",
   "Weekly proof summary and CSV export",
-  "Founder-assisted setup with the $149 setup fee waived",
+  "Direct founder access, yours no charge (normally $149 — free right now)",
 ];
 
 export default async function FoundingCheckoutPage({ params }: Props) {
@@ -41,15 +41,16 @@ export default async function FoundingCheckoutPage({ params }: Props) {
           </h1>
           <p className="mt-3 text-sm leading-relaxed text-gray-600">
             You&apos;re claiming a Founding Member spot for{" "}
-            <span className="font-semibold text-gray-900">{page.business_name}</span>. The normal $149 setup fee is
-            waived for Founding Members.
+            <span className="font-semibold text-gray-900">{page.business_name}</span>. You&apos;ll get direct founder access
+            (call, text, or a coffee if you&apos;re Gold Coast local) at no charge — normally $149, free for Founding Members.
+            No appointment needed, zero obligation.
           </p>
 
           <div className="mt-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
             <p className="font-bold">First 50 businesses only.</p>
             <p className="mt-1">
-              $49 AUD/month is locked while subscribed. After the Founding 50, standard pricing is planned at $99/mo +
-              $149 setup.
+              $49 AUD/month is locked in while you stay subscribed. After the Founding 50, standard pricing is planned at
+              $99/mo, with founder access charged separately.
             </p>
           </div>
 

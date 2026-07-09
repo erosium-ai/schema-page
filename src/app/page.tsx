@@ -26,7 +26,7 @@ export default function Home() {
               then you can upgrade it into a verified lead engine with tracked calls, quote requests, and proof reporting.
             </p>
             <p className="mt-3 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-950">
-              Founding 50 offer: Verified Lead Engine for $49 AUD/month, with the normal $149 setup fee waived.
+              Founding 50 offer: Verified Lead Engine for $49 AUD/month, with direct founder access included — normally $149, yours free.
               <span className="block mt-1 font-semibold">Built to help customers find you, trust you, enquire, and let you see what came through.</span>
             </p>
           </div>

@@ -424,7 +424,7 @@ export default function PageShell({
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-brand-600 mt-0.5">✓</span>
-                    Founder-assisted setup with the $149 setup fee waived
+                    Direct founder access, yours no charge (normally $149 — free right now)
                   </li>
                 </ul>
                 <p className="text-lg font-semibold text-gray-900">

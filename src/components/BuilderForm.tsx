@@ -25,7 +25,7 @@ const VERIFIED_LEAD_ENGINE_BENEFITS = [
   "TrustBadge verification for up to 3 credentials",
   "Tracked calls, email clicks, quote requests, and source attribution",
   "Instant lead alerts and weekly proof summary",
-  "Founder-assisted setup with the $149 setup fee waived",
+  "Direct founder access, yours no charge (normally $149 — free right now)",
 ];
 
 export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderFormProps) {
@@ -464,7 +464,7 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
                   🔥 Founding Member — $49/mo (first 50 businesses)
                 </p>
                 <p className="mt-1 text-xs text-amber-800">
-                  Verified lead profile + TrustBadge + tracked enquiries + weekly proof summary. $149 setup waived for Founding 50.
+                  Verified lead profile + TrustBadge + tracked enquiries + weekly proof summary. Direct founder access included — normally $149, yours free.
                 </p>
                 <a
                   href={`/checkout/founding/${encodeURIComponent(createdSlug)}`}
