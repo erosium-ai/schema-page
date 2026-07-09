@@ -274,6 +274,55 @@ export async function POST(req: NextRequest) {
       });
     }
 
+    // Also mirror the newly-created profile into the shared `business_profiles`
+    // table with plan='free'. This closes the pre-payment gap so the /welcome +
+    // dashboard flow always finds a matching business_profiles row when the
+    // customer upgrades to Founding Member. Best-effort; never blocks profile
+    // creation.
+    try {
+      const pageId = (data as { id?: string } | null)?.id ?? null;
+      const businessProfilePayload: Record<string, unknown> = {
+        source_page_id: pageId,
+        slug,
+        business_name: businessName,
+        description,
+        phone: contactPhone,
+        email: contactEmail,
+        website: websiteUrl,
+        services,
+        social_links: socialLinks,
+        metadata: {
+          ...(faqs.length > 0 ? { faqs } : {}),
+          tagline,
+          location_address: locationAddress,
+          mirrored_from_pages_at: new Date().toISOString(),
+        },
+        plan: "free",
+        status: "active",
+      };
+
+      const { error: bpErr } = await adminClient
+        .from("business_profiles")
+        .insert(businessProfilePayload);
+
+      if (bpErr) {
+        // Duplicate is fine (another path already inserted); anything else we log.
+        const dup = bpErr.code === "23505" || bpErr.message?.includes("duplicate");
+        if (!dup) {
+          console.warn("[credentials-ai][page-create] business_profiles insert failed", {
+            slug,
+            code: bpErr.code,
+            message: bpErr.message,
+          });
+        }
+      }
+    } catch (mirrorErr) {
+      console.warn("[credentials-ai][page-create] business_profiles mirror threw", {
+        slug,
+        error: (mirrorErr as Error)?.message,
+      });
+    }
+
     return NextResponse.json({ success: true, data });
   } catch (err) {
     return NextResponse.json(
