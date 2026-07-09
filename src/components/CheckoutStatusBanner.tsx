@@ -24,6 +24,11 @@ export default function CheckoutStatusBanner() {
   }
 
   const isSuccess = checkout === "success";
+  const plan = searchParams.get("plan");
+  const successMessage =
+    plan === "founding"
+      ? "Payment successful! Your Credentials AI Founding Member subscription is active. It may take a few seconds to update."
+      : "Payment successful! Your subscription is active. It may take a few seconds to update.";
 
   return (
     <div
@@ -39,9 +44,7 @@ export default function CheckoutStatusBanner() {
         {isSuccess ? "🎉" : "⚠️"}
       </span>
       <p className="text-sm font-medium flex-1">
-        {isSuccess
-          ? "Payment successful! Your Pro AI Presence subscription is active. It may take a few seconds to update."
-          : "Payment cancelled — no charge. Try again anytime."}
+        {isSuccess ? successMessage : "Payment cancelled — no charge. Try again anytime."}
       </p>
       <button
         onClick={() => setVisible(false)}

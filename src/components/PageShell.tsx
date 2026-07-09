@@ -400,47 +400,31 @@ export default function PageShell({
               <div className="space-y-4">
                 <div className="inline-flex items-center gap-1.5 text-brand-600 font-semibold text-sm">
                   <Sparkles className="h-4 w-4" />
-                  Pro AI Presence
+                  Credentials AI Founding Member
                 </div>
                 <h2 className="text-2xl font-extrabold text-gray-900">
-                  Upgrade to Pro AI Presence
+                  Turn this profile into a verified lead engine
                 </h2>
                 <ul className="space-y-2 text-gray-700">
                   <li className="flex items-start gap-2">
                     <span className="text-brand-600 mt-0.5">✓</span>
-                    Enhanced AI-readable business page
+                    Verified business lead profile customers can call, email, or request quotes from
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-brand-600 mt-0.5">✓</span>
-                    Structured data built for ChatGPT, Gemini, Grok, Claude, and Google
+                    TrustBadge verification for up to 3 credentials
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-brand-600 mt-0.5">✓</span>
-                    Service area + category optimisation
+                    Tracked calls, email clicks, quote requests, and source attribution
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-brand-600 mt-0.5">✓</span>
-                    FAQ section written for AI/search answers
+                    Instant lead alerts and weekly proof summary
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-brand-600 mt-0.5">✓</span>
-                    Click-to-call / website / social links
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-brand-600 mt-0.5">✓</span>
-                    Priority updates when business details change
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-brand-600 mt-0.5">✓</span>
-                    QR-code-ready page link
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-brand-600 mt-0.5">✓</span>
-                    Basic conversion tracking
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-brand-600 mt-0.5">✓</span>
-                    All future Pro features
+                    Founder-assisted setup with the $149 setup fee waived
                   </li>
                 </ul>
                 <p className="text-lg font-semibold text-gray-900">

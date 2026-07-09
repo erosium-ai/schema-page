@@ -11,7 +11,7 @@ export default function Home() {
         <div className="max-w-4xl mx-auto px-4 py-6 flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-extrabold tracking-tight">SchemaPage</h1>
-            <p className="text-sm text-gray-600">Make your business readable by humans and AI agents.</p>
+            <p className="text-sm text-gray-600">Create an AI-readable business profile that can grow into a verified lead engine.</p>
           </div>
           <SchemaBadge />
         </div>
@@ -20,15 +20,14 @@ export default function Home() {
       <main className="max-w-4xl mx-auto px-4 py-10">
         <div className="bg-white rounded-2xl shadow-sm border p-8">
           <div className="mb-8">
-            <h2 className="text-xl font-bold mb-2">Create Your AI-Agent Readable Page</h2>
+            <h2 className="text-xl font-bold mb-2">Start your Credentials AI profile</h2>
             <p className="text-gray-600">
-              Fill in the details below. We'll generate a beautiful landing page
-              with structured Schema.org markup that AI agents can read and
-              understand.
+              Fill in the details below. We&apos;ll generate a clean business profile with structured Schema.org markup,
+              then you can upgrade it into a verified lead engine with tracked calls, quote requests, and proof reporting.
             </p>
-            <p className="mt-3 rounded-lg border border-brand-200 bg-brand-50 px-4 py-3 text-sm font-medium text-brand-900">
-              Our goal: help get your business to the top of AI searches like ChatGPT, Gemini, Grok, and Claude.
-              <span className="block mt-1 font-semibold">So customers find you first — not your competitors.</span>
+            <p className="mt-3 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-950">
+              Founding 50 offer: Verified Lead Engine for $49 AUD/month, with the normal $149 setup fee waived.
+              <span className="block mt-1 font-semibold">Built to help customers find you, trust you, enquire, and let you see what came through.</span>
             </p>
           </div>
 

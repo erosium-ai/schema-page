@@ -309,7 +309,7 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
           placeholder="Tell visitors what you do..."
         />
         <p className="mt-1 text-xs text-gray-500">
-          Tip: include how you help customers and where you service so your business can rank higher in AI results across ChatGPT, Gemini, Grok, and Claude.
+          Tip: include how you help customers and where you service so people and AI systems can understand your business clearly.
         </p>
       </div>
 
@@ -487,7 +487,7 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
           ? "Creating..."
           : isPaidIntent
             ? `Create page & continue to ${isVerifiedLeadEngineIntent ? "Founding 50" : "Pro"} checkout`
-            : "Create AI-Agent Readable Page"}
+            : "Create AI-readable business profile"}
       </button>
 
       {isPaidIntent && (

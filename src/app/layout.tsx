@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "SchemaPage — AI-Agent Readable Business Pages",
-  description: "Build beautiful landing pages that humans love and AI agents can read.",
+  title: "SchemaPage — Credentials AI Profile Builder",
+  description: "Create an AI-readable business profile and upgrade it into a verified lead engine with tracked enquiries.",
 };
 
 export default function RootLayout({
