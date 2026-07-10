@@ -215,7 +215,10 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
             placeholder="you@example.com"
           />
           <p className="text-xs text-gray-500 mt-1">
-            We&apos;ll use this to follow up with page tips and upgrade offers. We won&apos;t share it.
+            We use this to set up your account, send service updates, and support you. Your creator email is not shown on your public page.
+          </p>
+          <p className="text-xs text-gray-500 mt-1">
+            Promotional messages require separate consent; we won&apos;t send them from this required field.
           </p>
         </div>
       </div>
@@ -497,6 +500,15 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
           />
           <span className="text-sm text-gray-600">Pick your brand accent</span>
         </div>
+      </div>
+
+      <div className="rounded-xl border border-amber-200 bg-amber-50/60 p-4 text-sm text-amber-900">
+        <p className="font-semibold">Public profile notice</p>
+        <p className="mt-1">
+          The business/contact details you choose above will be published at a public URL, structured for search engines and AI systems,
+          and may be crawled, indexed, cached or quoted by third parties. Your creator/account email stays private and is not published.
+          See our <a href="https://credentialsai.com.au/privacy" className="font-medium underline" rel="noreferrer">Privacy Policy</a> for more.
+        </p>
       </div>
 
       {error && (

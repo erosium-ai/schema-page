@@ -55,7 +55,7 @@ export default function TermsPage() {
         <h2>7. Contact</h2>
         <p>
           Questions about these terms? Email us at{" "}
-          <a href="mailto:support@schemapage.io">support@schemapage.io</a>.
+          <a href="mailto:support@erosium.ai">support@erosium.ai</a>.
         </p>
       </article>
     </div>
