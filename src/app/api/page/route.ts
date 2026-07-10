@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { createHash } from "node:crypto";
 import { isValidSlug, sanitizeSlug } from "@/lib/slug";
+import { isValidBusinessType, parseServiceAreas, sanitizeGbpUrl } from "@/lib/business-types";
 
 const RATE_LIMIT_PER_24H = 1;
 
@@ -219,6 +220,30 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // v1.1 findability fields — all OPTIONAL (never block a save), all ride
+    // in metadata so no pages-table migration is needed.
+    const businessType = isValidBusinessType(body.business_type)
+      ? String(body.business_type).trim().toLowerCase()
+      : null;
+    const serviceAreas = parseServiceAreas(body.service_areas);
+    const gbpUrl = sanitizeGbpUrl(body.google_business_profile_url);
+    if (body.google_business_profile_url && String(body.google_business_profile_url).trim() && !gbpUrl) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "Google Business Profile link doesn't look right — paste the link from Google Maps or your Google Business Profile (google.com/maps, maps.app.goo.gl or g.page).",
+        },
+        { status: 400 }
+      );
+    }
+
+    const metadata: Record<string, unknown> = {};
+    if (faqs.length > 0) metadata.faqs = faqs;
+    if (businessType) metadata.business_type = businessType;
+    if (serviceAreas.length > 0) metadata.service_areas = serviceAreas;
+    if (gbpUrl) metadata.google_business_profile_url = gbpUrl;
+
     const pagePayload: Record<string, unknown> = {
       slug,
       business_name: businessName,
@@ -230,7 +255,7 @@ export async function POST(req: NextRequest) {
       website_url: websiteUrl,
       location_address: locationAddress,
       social_links: socialLinks,
-      metadata: faqs.length > 0 ? { faqs } : {},
+      metadata,
       brand_color: brandColor,
     };
 

@@ -3,6 +3,18 @@
 import { useState } from "react";
 import { PageData, ServiceItem } from "@/lib/types";
 import { sanitizeSlug } from "@/lib/slug";
+import { BUSINESS_TYPES } from "@/lib/business-types";
+
+const FAQ_SEEDS: Array<{ question: string; answer: string }> = [
+  {
+    question: "Which areas do you service?",
+    answer: "",
+  },
+  {
+    question: "Are you licensed and insured?",
+    answer: "",
+  },
+];
 
 interface BuilderFormProps {
   onPageCreated?: (page: PageData) => void;
@@ -39,6 +51,18 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
   const [createdSlug, setCreatedSlug] = useState<string | null>(null);
   const [slugValue, setSlugValue] = useState("");
   const [slugEditedManually, setSlugEditedManually] = useState(false);
+  const [faqPrefill, setFaqPrefill] = useState<Record<number, { question: string; answer: string }>>({});
+
+  const seedFaq = (seed: { question: string; answer: string }) => {
+    setFaqPrefill((prev) => {
+      // Find the first slot not already seeded.
+      const used = new Set(Object.keys(prev).map(Number));
+      let slot = 0;
+      while (used.has(slot)) slot++;
+      if (slot >= faqCount) setFaqCount(slot + 1);
+      return { ...prev, [slot]: seed };
+    });
+  };
   const isProIntent = intent === "pro";
   const isVerifiedLeadEngineIntent = intent === "verified_lead_engine";
   const isPaidIntent = isProIntent || isVerifiedLeadEngineIntent;
@@ -106,6 +130,10 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
       location_address: (formData.get("location_address") as string)?.trim() || undefined,
       social_links: socialLinks,
       faqs,
+      business_type: String(formData.get("business_type") || "").trim() || undefined,
+      service_areas: String(formData.get("service_areas") || "").trim() || undefined,
+      google_business_profile_url:
+        String(formData.get("google_business_profile_url") || "").trim() || undefined,
       brand_color: (formData.get("brand_color") as string) || "#22c55e",
     };
 
@@ -222,6 +250,60 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
           </p>
         </div>
 
+      <section className="rounded-xl border border-amber-200 bg-amber-50/60 p-4">
+        <h3 className="text-sm font-bold text-amber-900">Get found — what do you do and where?</h3>
+        <p className="mt-1 text-xs text-amber-800">
+          These three answers do the heavy lifting for AI and search visibility.
+        </p>
+        <div className="mt-3 grid grid-cols-1 gap-3">
+          <div>
+            <label className="block text-sm font-medium mb-1">What type of business are you?</label>
+            <select
+              name="business_type"
+              defaultValue=""
+              className="w-full border rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500"
+            >
+              <option value="" disabled>
+                Pick your trade or industry…
+              </option>
+              {BUSINESS_TYPES.map((t) => (
+                <option key={t.value} value={t.value}>
+                  {t.label}
+                </option>
+              ))}
+            </select>
+            <p className="mt-1 text-xs text-gray-500">
+              This tells AI systems exactly what you are — no guessing.
+            </p>
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">Which suburbs do you cover?</label>
+            <textarea
+              name="service_areas"
+              rows={2}
+              maxLength={1400}
+              className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
+              placeholder="Burleigh Heads, Palm Beach, Miami, Varsity Lakes"
+            />
+            <p className="mt-1 text-xs text-gray-500">
+              Tip: list every suburb, separated by commas — &ldquo;Burleigh, Palm Beach, Miami&rdquo; gets found. &ldquo;Gold Coast&rdquo; doesn&apos;t.
+            </p>
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">Google Business Profile / Maps link (optional)</label>
+            <input
+              name="google_business_profile_url"
+              type="url"
+              className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
+              placeholder="https://maps.app.goo.gl/…"
+            />
+            <p className="mt-1 text-xs text-gray-500">
+              Linking your Google listing confirms to machines that both pages are the same real business.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <section className="rounded-xl border border-sky-200 bg-sky-50/60 p-4">
         <h3 className="text-sm font-bold text-sky-900">Pro-ready social links</h3>
         <p className="mt-1 text-xs text-sky-800">
@@ -260,18 +342,32 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
         <p className="mt-1 text-xs text-violet-800">
           Add answers customers and AI search tools ask for. Publish these on Pro pages.
         </p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {FAQ_SEEDS.map((seed) => (
+            <button
+              key={seed.question}
+              type="button"
+              onClick={() => seedFaq(seed)}
+              className="rounded-full border border-violet-300 bg-white px-3 py-1 text-xs font-medium text-violet-700 hover:bg-violet-100"
+            >
+              + {seed.question}
+            </button>
+          ))}
+        </div>
         <div className="mt-3 space-y-3">
           {Array.from({ length: faqCount }).map((_, i) => (
-            <div key={i} className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div key={`${i}-${faqPrefill[i]?.question ?? ""}`} className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <input
                 name={`faq_question_${i}`}
                 maxLength={180}
+                defaultValue={faqPrefill[i]?.question ?? ""}
                 className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
                 placeholder="FAQ question"
               />
               <input
                 name={`faq_answer_${i}`}
                 maxLength={600}
+                defaultValue={faqPrefill[i]?.answer ?? ""}
                 className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
                 placeholder="Short answer"
               />
