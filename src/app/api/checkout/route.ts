@@ -1,7 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { getPageBySlug } from "@/lib/subscription";
-import { getCheckoutPlanCopy, normalizeCheckoutPlan } from "@/lib/checkout-plans";
+import {
+  FOUNDING_MEMBER_LOOKUP_KEY,
+  getAiReadyPriceCopy,
+  getCheckoutPlanCopy,
+  normalizeBillingCycle,
+  normalizeCheckoutPlan,
+} from "@/lib/checkout-plans";
 import type Stripe from "stripe";
 
 export async function POST(req: NextRequest) {
@@ -9,7 +15,9 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const slug = typeof body.slug === "string" ? body.slug.trim() : "";
     const plan = normalizeCheckoutPlan(body.plan);
+    const billingCycle = normalizeBillingCycle(body.billingCycle ?? body.billing_cycle);
     const planCopy = getCheckoutPlanCopy(plan);
+    const priceCopy = getAiReadyPriceCopy(billingCycle);
 
     if (!slug) {
       return NextResponse.json(
@@ -30,7 +38,7 @@ export async function POST(req: NextRequest) {
     const credentialsAiDomain =
       process.env.CREDENTIALS_AI_DOMAIN || "https://credentialsai.com.au";
 
-    // Founding Member (verified_lead_engine) checkouts now thread the customer
+    // AI-Ready Business Page checkouts now thread the customer
     // straight into the Credentials AI /welcome flow so they land on a real
     // dashboard instead of the SchemaPage builder page. Legacy `pro` checkouts
     // keep the old success/cancel URLs.
@@ -46,12 +54,17 @@ export async function POST(req: NextRequest) {
     let lineItem: Stripe.Checkout.SessionCreateParams.LineItem;
 
     if (plan === "verified_lead_engine") {
-      const configuredPriceId = process.env.STRIPE_FOUNDING_MEMBER_PRICE_ID;
+      const configuredPriceId =
+        process.env[priceCopy.envKey] ||
+        (billingCycle === "monthly" ? process.env.STRIPE_FOUNDING_MEMBER_PRICE_ID : undefined);
       let priceId = configuredPriceId?.trim();
 
       if (!priceId) {
         const prices = await stripe.prices.list({
-          lookup_keys: [planCopy.lookupKey!],
+          lookup_keys:
+            billingCycle === "monthly"
+              ? [priceCopy.lookupKey, FOUNDING_MEMBER_LOOKUP_KEY]
+              : [priceCopy.lookupKey],
           active: true,
           limit: 1,
         });
@@ -60,7 +73,13 @@ export async function POST(req: NextRequest) {
 
       if (!priceId) {
         return NextResponse.json(
-          { success: false, error: "Founding Member Stripe price is not configured" },
+          {
+            success: false,
+            error:
+              billingCycle === "weekly"
+                ? "Weekly Stripe price is not configured"
+                : "Monthly Stripe price is not configured",
+          },
           { status: 500 }
         );
       }
@@ -94,6 +113,8 @@ export async function POST(req: NextRequest) {
       metadata: {
         slug: page.slug,
         plan,
+        billing_cycle: plan === "verified_lead_engine" ? billingCycle : "monthly",
+        price_label: plan === "verified_lead_engine" ? priceCopy.priceLabel : planCopy.priceLabel,
         source: "schemapage_checkout",
         product: "credentials_ai",
         business_name: page.business_name,
@@ -102,6 +123,8 @@ export async function POST(req: NextRequest) {
         metadata: {
           slug: page.slug,
           plan,
+          billing_cycle: plan === "verified_lead_engine" ? billingCycle : "monthly",
+          price_label: plan === "verified_lead_engine" ? priceCopy.priceLabel : planCopy.priceLabel,
           product: "credentials_ai",
           business_name: page.business_name,
         },

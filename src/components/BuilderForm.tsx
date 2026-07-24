@@ -11,7 +11,7 @@ const FAQ_SEEDS: Array<{ question: string; answer: string }> = [
     answer: "",
   },
   {
-    question: "Are you licensed and insured?",
+    question: "What makes your business trustworthy?",
     answer: "",
   },
 ];
@@ -33,11 +33,10 @@ const PRO_AI_PRESENCE_BENEFITS = [
 
 const VERIFIED_LEAD_ENGINE_BENEFITS = [
   "Everything in the free AI-readable profile",
-  "Credentials AI lead profile with quote form and click tracking",
-  "TrustBadge verification for up to 3 credentials",
+  "AI-Ready Business Page with quote form and click tracking",
+  "Trust wording based on official Australian Business Register data",
   "Tracked calls, email clicks, quote requests, and source attribution",
   "Instant lead alerts and weekly proof summary",
-  "Direct founder access, yours no charge (normally $149 — free right now)",
 ];
 
 export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderFormProps) {
@@ -180,7 +179,7 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
       {isPaidIntent && (
         <div className="rounded-xl border border-brand-200 bg-brand-50 px-4 py-3 text-sm text-brand-900">
           <p className="font-semibold">
-            You&apos;re starting {isVerifiedLeadEngineIntent ? "Verified Lead Engine" : "Pro AI Presence"}.
+            You&apos;re starting {isVerifiedLeadEngineIntent ? "AI-Ready Business Page" : "Pro AI Presence"}.
           </p>
           <p className="mt-1">
             Step 1: create your AI-readable page. Step 2: continue to secure checkout.
@@ -529,10 +528,10 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
           {createdSlug && (
             <div className="rounded-xl border border-brand-200 bg-brand-50/40 p-4 sm:p-5">
               <p className="text-sm font-semibold text-brand-800">
-                🚀 Your page is live — now turn it into a verified lead engine
+                🚀 Your page is live — now upgrade it to an AI-Ready Business Page
               </p>
               <p className="mt-1 text-xs text-brand-700/80">
-                Add a lead profile, TrustBadge verification, tracked quote requests, instant alerts, and weekly proof reporting.
+                Add an ABN-backed trust profile, tracked quote requests, instant alerts, and weekly proof reporting.
               </p>
 
               <div className="mt-4 space-y-3">
@@ -542,7 +541,7 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
                   disabled={proCheckoutLoading}
                   className="w-full inline-flex items-center justify-center rounded-lg bg-brand-600 px-5 py-3 text-sm font-bold text-white hover:bg-brand-700 transition shadow-sm disabled:opacity-60"
                 >
-                  {proCheckoutLoading ? "Opening secure checkout..." : "Claim Founding 50 — Verified Lead Engine $49/mo"}
+                  {proCheckoutLoading ? "Opening secure checkout..." : "Choose $49/month or $12.90/week"}
                 </button>
 
                 <div className="grid grid-cols-2 gap-3">
@@ -569,16 +568,16 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
 
               <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50/60 p-3">
                 <p className="text-xs font-bold text-amber-900">
-                  🔥 Founding Member — $49/mo (first 50 businesses)
+                  AI-Ready Business Page — $49/month or $12.90/week
                 </p>
                 <p className="mt-1 text-xs text-amber-800">
-                  Verified lead profile + TrustBadge + tracked enquiries + weekly proof summary. Direct founder access included — normally $149, yours free.
+                  Same product. Choose weekly or monthly. Cancel anytime. Includes tracked enquiries, ABN-backed trust wording, and weekly proof summary.
                 </p>
                 <a
                   href={`/checkout/founding/${encodeURIComponent(createdSlug)}`}
                   className="mt-2 inline-block text-xs font-semibold text-amber-900 underline hover:text-amber-950"
                 >
-                  Claim your Founding 50 spot →
+                  Choose weekly or monthly →
                 </a>
               </div>
             </div>
@@ -594,14 +593,14 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
         {loading
           ? "Creating..."
           : isPaidIntent
-            ? `Create page & continue to ${isVerifiedLeadEngineIntent ? "Founding 50" : "Pro"} checkout`
+            ? `Create page & continue to ${isVerifiedLeadEngineIntent ? "AI-Ready Business Page" : "Pro"} checkout`
             : "Create AI-readable business profile"}
       </button>
 
       {isPaidIntent && (
         <div className="rounded-xl border-2 border-sky-300 bg-sky-100 px-4 py-4 text-slate-900 shadow-sm">
           <p className="text-sm font-extrabold text-sky-950">
-            {isVerifiedLeadEngineIntent ? "Verified Lead Engine includes:" : "Pro AI Presence includes:"}
+            {isVerifiedLeadEngineIntent ? "AI-Ready Business Page includes:" : "Pro AI Presence includes:"}
           </p>
           <div className="mt-3 grid gap-2 text-sm leading-relaxed sm:grid-cols-2">
             {(isVerifiedLeadEngineIntent ? VERIFIED_LEAD_ENGINE_BENEFITS : PRO_AI_PRESENCE_BENEFITS).map((benefit) => (

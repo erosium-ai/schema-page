@@ -400,19 +400,19 @@ export default function PageShell({
               <div className="space-y-4">
                 <div className="inline-flex items-center gap-1.5 text-brand-600 font-semibold text-sm">
                   <Sparkles className="h-4 w-4" />
-                  Credentials AI Founding Member
+                  Credentials AI
                 </div>
                 <h2 className="text-2xl font-extrabold text-gray-900">
-                  Turn this profile into a verified lead engine
+                  Upgrade this profile to an AI-Ready Business Page
                 </h2>
                 <ul className="space-y-2 text-gray-700">
                   <li className="flex items-start gap-2">
                     <span className="text-brand-600 mt-0.5">✓</span>
-                    Verified business lead profile customers can call, email, or request quotes from
+                    AI-ready business page customers can call, email, or request quotes from
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-brand-600 mt-0.5">✓</span>
-                    TrustBadge verification for up to 3 credentials
+                    ABN-backed trust wording based on official Australian Business Register data
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-brand-600 mt-0.5">✓</span>
@@ -422,13 +422,10 @@ export default function PageShell({
                     <span className="text-brand-600 mt-0.5">✓</span>
                     Instant lead alerts and weekly proof summary
                   </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-brand-600 mt-0.5">✓</span>
-                    Direct founder access, yours no charge (normally $149 — free right now)
-                  </li>
+
                 </ul>
                 <p className="text-lg font-semibold text-gray-900">
-                  $49 AUD <span className="text-sm font-normal text-gray-500">/ month Founding 50 subscription</span>
+                  $49/month <span className="text-sm font-normal text-gray-500">or $12.90/week. Cancel anytime.</span>
                 </p>
               </div>
               <div className="shrink-0">

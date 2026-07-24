@@ -27,7 +27,7 @@ export default function CheckoutStatusBanner() {
   const plan = searchParams.get("plan");
   const successMessage =
     plan === "founding"
-      ? "Payment successful! Your Credentials AI Founding Member subscription is active. It may take a few seconds to update."
+      ? "Payment successful! Your AI-Ready Business Page subscription is active. It may take a few seconds to update."
       : "Payment successful! Your subscription is active. It may take a few seconds to update.";
 
   return (

@@ -29,7 +29,7 @@ export default function UpgradeButton({ slug }: UpgradeButtonProps) {
         ) : (
           <Sparkles className="h-5 w-5" />
         )}
-        {loading ? "Opening checkout..." : "Claim Founding 50 — Verified Lead Engine $49/month"}
+        {loading ? "Opening checkout..." : "Upgrade to AI-Ready Business Page"}
       </button>
 
       {error && (

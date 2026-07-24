@@ -11,7 +11,7 @@ export default function Home() {
         <div className="max-w-4xl mx-auto px-4 py-6 flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-extrabold tracking-tight">SchemaPage</h1>
-            <p className="text-sm text-gray-600">Create an AI-readable business profile that can grow into a verified lead engine.</p>
+            <p className="text-sm text-gray-600">Create an AI-readable business profile that can grow into an AI-Ready Business Page.</p>
           </div>
           <SchemaBadge />
         </div>
@@ -20,13 +20,13 @@ export default function Home() {
       <main className="max-w-4xl mx-auto px-4 py-10">
         <div className="bg-white rounded-2xl shadow-sm border p-8">
           <div className="mb-8">
-            <h2 className="text-xl font-bold mb-2">Start your Credentials AI profile</h2>
+            <h2 className="text-xl font-bold mb-2">Start your free AI Business Card</h2>
             <p className="text-gray-600">
-              Fill in the details below. We&apos;ll generate a clean business profile with structured Schema.org markup,
-              then you can upgrade it into a verified lead engine with tracked calls, quote requests, and proof reporting.
+              Fill in the details below. We&apos;ll generate a clean AI Business Card with structured Schema.org markup,
+              then you can upgrade it into an AI-Ready Business Page with tracked calls, quote requests, and proof reporting.
             </p>
             <p className="mt-3 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-950">
-              Founding 50 offer: Verified Lead Engine for $49 AUD/month, with direct founder access included — normally $149, yours free.
+              AI-Ready Business Page: $49/month or $12.90/week. Same product. Choose weekly or monthly. Cancel anytime.
               <span className="block mt-1 font-semibold">Built to help customers find you, trust you, enquire, and let you see what came through.</span>
             </p>
           </div>
