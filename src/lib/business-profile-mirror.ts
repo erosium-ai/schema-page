@@ -47,7 +47,9 @@ export async function mirrorFoundingMemberState(
   // Find existing business_profiles row for this slug.
   const { data: existing, error: fetchErr } = await client
     .from("business_profiles")
-    .select("id, plan, founding_number")
+    .select(
+      "id, plan, founding_number, stripe_customer_id, stripe_subscription_id, subscription_status, next_payment_at, payment_email"
+    )
     .eq("slug", slug)
     .maybeSingle();
 
@@ -62,11 +64,14 @@ export async function mirrorFoundingMemberState(
 
   const updatePayload: Record<string, unknown> = {
     plan: "founder",
-    subscription_status: payload.subscriptionStatus ?? null,
-    stripe_customer_id: payload.customerId ?? null,
-    stripe_subscription_id: payload.subscriptionId ?? null,
-    next_payment_at: payload.nextPaymentAt ?? null,
-    payment_email: payload.paymentEmail ?? null,
+    subscription_status:
+      payload.subscriptionStatus ?? existing?.subscription_status ?? null,
+    stripe_customer_id:
+      payload.customerId ?? existing?.stripe_customer_id ?? null,
+    stripe_subscription_id:
+      payload.subscriptionId ?? existing?.stripe_subscription_id ?? null,
+    next_payment_at: payload.nextPaymentAt ?? existing?.next_payment_at ?? null,
+    payment_email: payload.paymentEmail ?? existing?.payment_email ?? null,
     updated_at: new Date().toISOString(),
   };
 

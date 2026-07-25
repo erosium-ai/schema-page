@@ -142,6 +142,38 @@ export async function POST(req: NextRequest) {
           }
         }
       }
+    } else if (
+      event.type === "customer.subscription.updated" ||
+      event.type === "customer.subscription.deleted"
+    ) {
+      const subscription = event.data.object as Stripe.Subscription;
+      const slug = subscription.metadata?.slug?.trim().toLowerCase();
+
+      if (slug) {
+        const customerId =
+          typeof subscription.customer === "string"
+            ? subscription.customer
+            : subscription.customer?.id ?? null;
+
+        type SubscriptionPeriod = Stripe.Subscription & {
+          current_period_end?: number;
+        };
+        const periodEnd = (subscription as SubscriptionPeriod).current_period_end;
+        const nextPaymentAt =
+          event.type === "customer.subscription.deleted" ||
+          subscription.status === "canceled" ||
+          typeof periodEnd !== "number"
+            ? null
+            : new Date(periodEnd * 1000).toISOString();
+
+        await mirrorFoundingMemberState({
+          slug,
+          customerId,
+          subscriptionId: subscription.id,
+          subscriptionStatus: subscription.status,
+          nextPaymentAt,
+        });
+      }
     }
 
     return NextResponse.json({ received: true });

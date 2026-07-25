@@ -35,6 +35,16 @@ function sanitizeOptionalUrl(input: unknown): string | null {
   return value;
 }
 
+function isValidAsciiEmail(value: string): boolean {
+  // Browser email fields can accept internationalized domains and encode them
+  // as punycode. Credentials AI currently supports ordinary ASCII email only;
+  // rejecting hidden Unicode punctuation prevents a visually plausible typo
+  // such as `com≥au` becoming an undeliverable Stripe customer email.
+  return /^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+$/.test(
+    value
+  );
+}
+
 type AdminClient = NonNullable<ReturnType<typeof getAdminClient>>;
 
 async function checkRateLimit(
@@ -156,16 +166,22 @@ export async function POST(req: NextRequest) {
       .filter((faq) => faq.question.length > 0 && faq.answer.length > 0)
       .slice(0, 8);
 
-    if (creatorEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(creatorEmail)) {
+    if (creatorEmail && !isValidAsciiEmail(creatorEmail)) {
       return NextResponse.json(
-        { success: false, error: "Invalid creator_email" },
+        {
+          success: false,
+          error: "Your email contains an invalid character. Re-type it using a normal address such as name@example.com.",
+        },
         { status: 400 }
       );
     }
 
-    if (contactEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail)) {
+    if (contactEmail && !isValidAsciiEmail(contactEmail)) {
       return NextResponse.json(
-        { success: false, error: "Invalid contact_email" },
+        {
+          success: false,
+          error: "Contact email contains an invalid character. Re-type it using a normal address such as name@example.com.",
+        },
         { status: 400 }
       );
     }
