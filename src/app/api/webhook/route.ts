@@ -157,20 +157,37 @@ export async function POST(req: NextRequest) {
 
         type SubscriptionPeriod = Stripe.Subscription & {
           current_period_end?: number;
+          cancel_at?: number | null;
         };
-        const periodEnd = (subscription as SubscriptionPeriod).current_period_end;
-        const nextPaymentAt =
+        const castSub = subscription as SubscriptionPeriod;
+        const periodEnd = castSub.current_period_end;
+
+        // Stripe's newer cancellation flow sets `cancel_at` to a future date
+        // (e.g. end of billing period) while keeping `status` = "active". We
+        // treat any subscription with `cancel_at` (or `cancel_at_period_end`)
+        // as canceled immediately for entitlement purposes — the customer has
+        // already said they want out and should not get paid features past
+        // this point.
+        const isCancelingNow =
           event.type === "customer.subscription.deleted" ||
           subscription.status === "canceled" ||
-          typeof periodEnd !== "number"
+          subscription.cancel_at_period_end === true ||
+          typeof castSub.cancel_at === "number";
+
+        const nextPaymentAt =
+          isCancelingNow || typeof periodEnd !== "number"
             ? null
             : new Date(periodEnd * 1000).toISOString();
+
+        const effectiveStatus = isCancelingNow
+          ? "canceled"
+          : subscription.status;
 
         await mirrorFoundingMemberState({
           slug,
           customerId,
           subscriptionId: subscription.id,
-          subscriptionStatus: subscription.status,
+          subscriptionStatus: effectiveStatus,
           nextPaymentAt,
         });
       }
