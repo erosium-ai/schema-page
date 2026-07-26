@@ -11,6 +11,17 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  // Force short CDN cache during deploy window, then relax
+  async headers() {
+    return [
+      {
+        source: "/",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=60, stale-while-revalidate=300" },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;

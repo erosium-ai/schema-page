@@ -31,6 +31,10 @@ const PRO_AI_PRESENCE_BENEFITS = [
   "Basic conversion tracking",
 ];
 
+/** Paid-mode submit label. HeroSection.tsx quotes this string verbatim so the
+ *  on-screen instruction always matches the real button. Keep both in sync. */
+export const PAID_SUBMIT_LABEL = "Create my AI-Ready Business Page";
+
 const VERIFIED_LEAD_ENGINE_BENEFITS = [
   "Everything in the free AI-readable profile",
   "AI-Ready Business Page with quote form and click tracking",
@@ -252,9 +256,9 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
           </p>
         </div>
 
-      <section className="rounded-xl border border-amber-200 bg-amber-50/60 p-4">
-        <h3 className="text-sm font-bold text-amber-900">Get found — what do you do and where?</h3>
-        <p className="mt-1 text-xs text-amber-800">
+      <section className="rounded-xl border border-cyan-200 bg-cyan-50/60 p-4">
+        <h3 className="text-sm font-bold text-cyan-900">Get found — what do you do and where?</h3>
+        <p className="mt-1 text-xs text-cyan-800">
           These three answers do the heavy lifting for AI and search visibility.
         </p>
         <div className="mt-3 grid grid-cols-1 gap-3">
@@ -501,7 +505,7 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
         </div>
       </div>
 
-      <div className="rounded-xl border border-amber-200 bg-amber-50/60 p-4 text-sm text-amber-900">
+      <div className="rounded-xl border border-cyan-200 bg-cyan-50/60 p-4 text-sm text-cyan-900">
         <p className="font-semibold">Public profile notice</p>
         <p className="mt-1">
           The business/contact details you choose above will be published at a public URL, structured for search engines and AI systems,
@@ -526,36 +530,51 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
           </div>
 
           {createdSlug && (
-            <div className="rounded-xl border border-brand-200 bg-brand-50/40 p-4 sm:p-5">
-              <p className="text-sm font-semibold text-brand-800">
-                🚀 Your page is live — now upgrade it to an AI-Ready Business Page
+            <div className="rounded-2xl bg-gradient-to-b from-slate-900 to-slate-800 border-2 border-emerald-400/50 p-5 sm:p-6 shadow-xl shadow-emerald-400/5">
+              {/* Header */}
+              <p className="text-sm font-extrabold text-emerald-300 tracking-wide">
+                🚀 YOUR PAGE IS LIVE
               </p>
-              <p className="mt-1 text-xs text-brand-700/80">
-                Add an ABN-backed trust profile, tracked quote requests, instant alerts, and weekly proof reporting.
+              <p className="mt-1 text-base font-bold text-white">
+                Upgrade to an AI-Ready Business Page
+              </p>
+              <p className="mt-1 text-sm text-slate-300">
+                ABN-backed trust profile, tracked enquiries, instant alerts, and weekly proof reporting.
               </p>
 
-              <div className="mt-4 space-y-3">
+              {/* Benefit pills */}
+              <div className="mt-4 flex flex-wrap gap-2">
+                {["ABN-verified trust", "Tracked enquiries", "Lead alerts", "Weekly proof"].map((b) => (
+                  <span key={b} className="inline-flex items-center gap-1.5 bg-slate-700/80 rounded-full px-3 py-1 text-xs font-medium text-emerald-300">
+                    <span className="text-emerald-300 font-bold">✓</span>{b}
+                  </span>
+                ))}
+              </div>
+
+              {/* Main CTA */}
+              <div className="mt-5 space-y-3">
                 <button
                   type="button"
                   onClick={handleStartProCheckout}
                   disabled={proCheckoutLoading}
-                  className="w-full inline-flex items-center justify-center rounded-lg bg-brand-600 px-5 py-3 text-sm font-bold text-white hover:bg-brand-700 transition shadow-sm disabled:opacity-60"
+                  className="w-full inline-flex items-center justify-center rounded-full bg-emerald-400 hover:bg-emerald-300 text-slate-900 px-6 py-3.5 text-sm font-bold transition-colors shadow-lg shadow-emerald-400/20 disabled:opacity-60"
                 >
                   {proCheckoutLoading ? "Opening secure checkout..." : "Choose $49/month or $12.90/week"}
                 </button>
 
+                {/* Secondary actions */}
                 <div className="grid grid-cols-2 gap-3">
                   <a
                     href={`/${createdSlug}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition"
+                    className="inline-flex items-center justify-center rounded-full border border-slate-600 bg-slate-800/60 px-4 py-2.5 text-sm font-medium text-slate-300 hover:border-slate-500 hover:text-white transition"
                   >
                     View my page
                   </a>
                   <a
                     href={`/checkout/founding/${encodeURIComponent(createdSlug)}`}
-                    className="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition"
+                    className="inline-flex items-center justify-center gap-1.5 rounded-full border-2 border-emerald-400/60 bg-emerald-400/10 px-4 py-2.5 text-sm font-bold text-emerald-300 hover:bg-emerald-400/20 hover:border-emerald-400 transition"
                   >
                     See what&apos;s included
                   </a>
@@ -563,22 +582,17 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
               </div>
 
               {proCheckoutError && (
-                <p className="mt-2 text-xs text-red-700">{proCheckoutError}</p>
+                <p className="mt-3 text-xs text-red-400">{proCheckoutError}</p>
               )}
 
-              <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50/60 p-3">
-                <p className="text-xs font-bold text-amber-900">
+              {/* Pricing info */}
+              <div className="mt-4 rounded-xl border border-emerald-400/30 bg-emerald-400/5 p-3">
+                <p className="text-xs font-bold text-emerald-300">
                   AI-Ready Business Page — $49/month or $12.90/week
                 </p>
-                <p className="mt-1 text-xs text-amber-800">
+                <p className="mt-1 text-xs text-slate-400">
                   Same product. Choose weekly or monthly. Cancel anytime. Includes tracked enquiries, ABN-backed trust wording, and weekly proof summary.
                 </p>
-                <a
-                  href={`/checkout/founding/${encodeURIComponent(createdSlug)}`}
-                  className="mt-2 inline-block text-xs font-semibold text-amber-900 underline hover:text-amber-950"
-                >
-                  Choose weekly or monthly →
-                </a>
               </div>
             </div>
           )}
@@ -593,19 +607,21 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
         {loading
           ? "Creating..."
           : isPaidIntent
-            ? `Create page & continue to ${isVerifiedLeadEngineIntent ? "AI-Ready Business Page" : "Pro"} checkout`
+            ? isVerifiedLeadEngineIntent
+              ? PAID_SUBMIT_LABEL
+              : "Create my Pro AI Presence"
             : "Create AI-readable business profile"}
       </button>
 
       {isPaidIntent && (
-        <div className="rounded-xl border-2 border-sky-300 bg-sky-100 px-4 py-4 text-slate-900 shadow-sm">
-          <p className="text-sm font-extrabold text-sky-950">
+        <div className="rounded-2xl bg-gradient-to-b from-slate-900 to-slate-800 border-2 border-emerald-400/50 px-5 py-5 shadow-xl shadow-emerald-400/5">
+          <p className="text-sm font-extrabold text-emerald-300 tracking-wide">
             {isVerifiedLeadEngineIntent ? "AI-Ready Business Page includes:" : "Pro AI Presence includes:"}
           </p>
-          <div className="mt-3 grid gap-2 text-sm leading-relaxed sm:grid-cols-2">
+          <div className="mt-3 grid gap-2.5 text-sm leading-relaxed sm:grid-cols-2">
             {(isVerifiedLeadEngineIntent ? VERIFIED_LEAD_ENGINE_BENEFITS : PRO_AI_PRESENCE_BENEFITS).map((benefit) => (
-              <p key={benefit} className="flex items-start gap-2">
-                <span className="mt-0.5 font-bold text-sky-700">✓</span>
+              <p key={benefit} className="flex items-start gap-2 text-slate-200">
+                <span className="mt-0.5 font-bold text-emerald-300">✓</span>
                 <span>{benefit}</span>
               </p>
             ))}

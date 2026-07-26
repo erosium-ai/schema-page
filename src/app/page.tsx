@@ -1,83 +1,91 @@
 import BuilderForm from "@/components/BuilderForm";
 import BuilderFormIntent from "@/components/BuilderFormIntent";
 import SchemaBadge from "@/components/SchemaBadge";
+import HeroSection from "@/components/HeroSection";
+import BuilderIntro from "@/components/BuilderIntro";
 import { Wrench, Coffee, BookOpen, ArrowRight } from "lucide-react";
 import { Suspense } from "react";
+
+export const revalidate = 60;
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b">
-        <div className="max-w-4xl mx-auto px-4 py-6 flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-extrabold tracking-tight">SchemaPage</h1>
-            <p className="text-sm text-gray-600">Create an AI-readable business profile that can grow into an AI-Ready Business Page.</p>
+      {/* === SOLO OPERATOR HERO — intent-aware (free vs paid) === */}
+      <HeroSection />
+
+      {/* === BUILDER SECTION === */}
+      <div id="builder">
+        <header className="bg-white border-b">
+          <div className="max-w-4xl mx-auto px-4 py-6 flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-extrabold tracking-tight">SchemaPage</h1>
+              <p className="text-sm text-gray-600">Create an AI-readable business profile that can grow into an AI-Ready Business Page.</p>
+            </div>
+            <SchemaBadge />
           </div>
-          <SchemaBadge />
-        </div>
-      </header>
+        </header>
 
-      <main className="max-w-4xl mx-auto px-4 py-10">
-        <div className="bg-white rounded-2xl shadow-sm border p-8">
-          <div className="mb-8">
-            <h2 className="text-xl font-bold mb-2">Start your free AI Business Card</h2>
-            <p className="text-gray-600">
-              Fill in the details below. We&apos;ll generate a clean AI Business Card with structured Schema.org markup,
-              then you can upgrade it into an AI-Ready Business Page with tracked calls, quote requests, and proof reporting.
-            </p>
-            <p className="mt-3 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-950">
-              AI-Ready Business Page: $49/month or $12.90/week. Same product. Choose weekly or monthly. Cancel anytime.
-              <span className="block mt-1 font-semibold">Built to help customers find you, trust you, enquire, and let you see what came through.</span>
-            </p>
+        <main className="max-w-4xl mx-auto px-4 py-10">
+          <div className="bg-white rounded-2xl shadow-sm border p-8">
+            <Suspense
+              fallback={
+                <div className="mb-8">
+                  <h2 className="text-xl font-bold mb-2">Start your free AI Business Card</h2>
+                </div>
+              }
+            >
+              <BuilderIntro />
+            </Suspense>
+
+            <Suspense fallback={<BuilderForm />}>
+              <BuilderFormIntent />
+            </Suspense>
           </div>
 
-          <Suspense fallback={<BuilderForm />}>
-            <BuilderFormIntent />
-          </Suspense>
-        </div>
+          <section className="mt-16">
+            <h2 className="text-xl font-bold mb-6 text-center">See it in action</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <DemoCard
+                href="/demo/plumber"
+                icon={<Wrench className="h-6 w-6 text-orange-600" />}
+                name="Joe&apos;s Plumbing"
+                tagline="Blocked drains fixed today"
+                color="#e85d04"
+              />
+              <DemoCard
+                href="/demo/cafe"
+                icon={<Coffee className="h-6 w-6 text-amber-800" />}
+                name="Gold Coast Coffee House"
+                tagline="Best flat white in Broadbeach"
+                color="#6b4226"
+              />
+              <DemoCard
+                href="/demo/bookkeeper"
+                icon={<BookOpen className="h-6 w-6 text-blue-600" />}
+                name="Bright Bookkeeping"
+                tagline="Your books, sorted."
+                color="#2563eb"
+              />
+            </div>
+          </section>
 
-        <section className="mt-16">
-          <h2 className="text-xl font-bold mb-6 text-center">See it in action</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <DemoCard
-              href="/demo/plumber"
-              icon={<Wrench className="h-6 w-6 text-orange-600" />}
-              name="Joe's Plumbing"
-              tagline="Blocked drains fixed today"
-              color="#e85d04"
+          <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <FeatureCard
+              title="Human Readable"
+              description="Clean, modern landing pages that look great on every device."
             />
-            <DemoCard
-              href="/demo/cafe"
-              icon={<Coffee className="h-6 w-6 text-amber-800" />}
-              name="Gold Coast Coffee House"
-              tagline="Best flat white in Broadbeach"
-              color="#6b4226"
+            <FeatureCard
+              title="AI Friendly"
+              description="Built-in Schema.org JSON-LD so agents know exactly what you offer."
             />
-            <DemoCard
-              href="/demo/bookkeeper"
-              icon={<BookOpen className="h-6 w-6 text-blue-600" />}
-              name="Bright Bookkeeping"
-              tagline="Your books, sorted."
-              color="#2563eb"
+            <FeatureCard
+              title="Machine Export"
+              description="One-click JSON + Markdown exports for any AI system."
             />
           </div>
-        </section>
-
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <FeatureCard
-            title="Human Readable"
-            description="Clean, modern landing pages that look great on every device."
-          />
-          <FeatureCard
-            title="AI Friendly"
-            description="Built-in Schema.org JSON-LD so agents know exactly what you offer."
-          />
-          <FeatureCard
-            title="Machine Export"
-            description="One-click JSON + Markdown exports for any AI system."
-          />
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
   );
 }

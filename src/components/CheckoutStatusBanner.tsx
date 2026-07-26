@@ -35,7 +35,7 @@ export default function CheckoutStatusBanner() {
       className={`fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-md ${
         isSuccess
           ? "bg-green-50 border-green-200 text-green-800"
-          : "bg-amber-50 border-amber-200 text-amber-800"
+          : "bg-cyan-50 border-cyan-200 text-cyan-800"
       } border rounded-xl shadow-lg px-4 py-3 flex items-start gap-3`}
       role="status"
       aria-live="polite"
@@ -51,7 +51,7 @@ export default function CheckoutStatusBanner() {
         className={`shrink-0 p-1 rounded-md transition ${
           isSuccess
             ? "text-green-700 hover:bg-green-100"
-            : "text-amber-700 hover:bg-amber-100"
+            : "text-cyan-700 hover:bg-cyan-100"
         }`}
         aria-label="Close banner"
       >

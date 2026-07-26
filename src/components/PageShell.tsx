@@ -86,7 +86,7 @@ export default function PageShell({
             </span>
           </div>
           {isPro ? (
-            <span className="inline-flex items-center gap-1.5 bg-amber-100 text-amber-800 text-sm font-bold px-3 py-1.5 rounded-full">
+            <span className="inline-flex items-center gap-1.5 bg-cyan-100 text-cyan-800 text-sm font-bold px-3 py-1.5 rounded-full">
               <Sparkles className="h-4 w-4" />
               PRO
             </span>
