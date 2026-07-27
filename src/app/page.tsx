@@ -113,7 +113,7 @@ const orgSchema = {
   ],
   "sameAs": [
     "https://x.com/Ikebuilds",
-    "https://linkedin.com/company/erosium",
+    "https://www.linkedin.com/in/isaac-anasson/",
     "https://github.com/erosium-ai"
   ]
 };
