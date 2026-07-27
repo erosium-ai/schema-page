@@ -154,6 +154,12 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
       setCreatedSlug(result.data.slug);
       onPageCreated?.(result.data);
 
+      // Fire Plausible custom event for goal tracking
+      try {
+        const intentLabel = isVerifiedLeadEngineIntent ? "verified_lead_engine" : isProIntent ? "pro" : "free";
+        (window as any).plausible?.("Profile Created", { props: { intent: intentLabel, slug: result.data.slug } });
+      } catch { /* tracking is best-effort, never block the user on it */ }
+
       if (isPaidIntent) {
         await startProCheckout(result.data.slug);
       }
