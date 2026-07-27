@@ -53,7 +53,7 @@ const orgSchema = {
   "@type": "Organization",
   "name": "Credentials AI",
   "alternateName": "Credentials AI by Erosium",
-  "description": "Credentials AI builds AI-readable business profiles for Australian local businesses. Every profile includes live ABN verification against the Australian Business Register, structured data for ChatGPT, Gemini, Siri, and Google AI Overviews, and tracked enquiry tools so tradies can see what's working.",
+  "description": "Credentials AI builds AI-readable business profiles so Australian tradies get found on ChatGPT, Siri, and Google AI Overviews. Every profile includes live ABN verification against the Australian Business Register, a tracked QR code, lead enquiry tracking, verified badge, and structured data built for AI search — free to start.",
   "url": "https://credentialsai.com.au",
   "email": "hello@erosium.com.au",
   "foundingDate": "2026-06-22",
@@ -113,7 +113,8 @@ const orgSchema = {
   ],
   "sameAs": [
     "https://x.com/Ikebuilds",
-    "https://linkedin.com/company/erosium"
+    "https://linkedin.com/company/erosium",
+    "https://github.com/erosium-ai"
   ]
 };
 
