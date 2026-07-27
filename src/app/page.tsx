@@ -8,9 +8,54 @@ import { Suspense } from "react";
 
 export const revalidate = 60;
 
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Will an AI-Ready Business Page guarantee me more leads?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No — and be wary of anyone who says it will. What it does is make your business easier to understand, easier to trust, and track enquiries that come through your profile. No one can honestly guarantee leads. We prove what happened."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does ABN Verified actually mean?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It means our system automatically checks the business ABN and registered details against the Australian Business Register — the official government database — and publishes what was checked and when. This gives customers confidence the business is real and properly registered."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can AI assistants like ChatGPT and Siri actually find my business through this?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Your AI-Ready Business Page includes structured data built for ChatGPT, Gemini, Siri, Claude, and Google AI Overviews. When someone asks an AI assistant for a local service, your page is structured so the AI can accurately read your business name, services, location, contact details and verified status."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this just another SEO service?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. SEO helps with traditional Google rankings. Credentials AI also builds your AI-readable profile — the new search layer where customers ask ChatGPT or Siri direct questions. Every AI-Ready Business Page includes tracked enquiry buttons so you can see what's working."
+      }
+    }
+  ]
+};
+
 export default function Home() {
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* FAQ structured data — enables Google rich snippet expandable Q&A boxes */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+
       {/* === SOLO OPERATOR HERO — intent-aware (free vs paid) === */}
       <HeroSection />
 
