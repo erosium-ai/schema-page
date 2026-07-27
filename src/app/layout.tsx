@@ -30,9 +30,9 @@ export const metadata: Metadata = {
     images: [
       {
         url: "https://credentialsai.com.au/og-image.png",
-        width: 512,
-        height: 512,
-        alt: "Credentials AI — AI-Ready Business Profiles with ABN Verification",
+        width: 1200,
+        height: 630,
+        alt: "Credentials AI — AI-Ready Business Profiles with ABN Verification, Enquiry Tracking, and QR Codes",
       },
     ],
   },
