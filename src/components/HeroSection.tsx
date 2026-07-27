@@ -15,6 +15,7 @@ const PREMIUM_INCLUDES = [
   "Full AI-Ready Business Page",
   "ABN-backed TrustBadge",
   "Tracked calls, quotes & sources",
+  "QR code for magnets, flyers, invoices & vehicles",
   "Weekly enquiry summary",
 ];
 
