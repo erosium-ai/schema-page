@@ -582,11 +582,11 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
       )}
 
       {isPaidIntent && (
-        <div className="rounded-xl border border-cyan-400/30 bg-cyan-400/5 p-4">
-          <p className="text-xs font-bold text-cyan-300">
+        <div className="rounded-xl border border-cyan-300/50 bg-cyan-300/10 p-4">
+          <p className="text-sm font-extrabold text-cyan-100">
             What happens after you pay?
           </p>
-          <p className="mt-1 text-xs leading-relaxed text-slate-400">
+          <p className="mt-1.5 text-sm leading-relaxed text-slate-200">
             Stripe confirms your payment, then stay on the page for a few seconds.
             Your Credentials AI dashboard opens automatically so you can track
             calls, quote enquiries and lead sources.
