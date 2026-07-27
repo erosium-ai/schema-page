@@ -109,6 +109,13 @@ export default function PageShell({
             {page.tagline && (
               <p className="text-xl text-gray-600 italic">{page.tagline}</p>
             )}
+            {/* ABN Verified badge — shown when ABR confirmed ABN as active */}
+            {page.metadata?.abn_verification?.status === "verified" && (
+              <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-sm font-semibold text-emerald-800">
+                <span className="text-emerald-500">✓</span>
+                ABN Verified: Active — {page.metadata.abn_verification.matchedBusinessName || "Registered business"}
+              </div>
+            )}
           </div>
 
           <section className="mb-8 rounded-xl border bg-gray-50 p-5">

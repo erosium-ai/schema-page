@@ -22,6 +22,21 @@ export function generateSchemaMarkup(page: PageData): SchemaMarkup {
     sameAs: page.social_links
       ? Object.values(page.social_links).filter(Boolean)
       : undefined,
+    // ABN verified data — injected into JSON-LD for Google E-E-A-T trust signals
+    identifier: page.metadata?.abn_verification?.status === "verified"
+      ? {
+          "@type": "PropertyValue",
+          propertyID: "Australian Business Number",
+          value: page.metadata.abn_verification.abn,
+          description: `ABN verified active via Australian Business Register API — last checked ${page.metadata.abn_verification.checkedAt}`,
+        }
+      : page.abn
+        ? {
+            "@type": "PropertyValue",
+            propertyID: "Australian Business Number",
+            value: page.abn,
+          }
+        : undefined,
     hasPart:
       page.is_pro && faqs.length > 0
         ? {

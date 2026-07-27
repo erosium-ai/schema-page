@@ -3,6 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { createHash } from "node:crypto";
 import { isValidSlug, sanitizeSlug } from "@/lib/slug";
 import { isValidBusinessType, parseServiceAreas, sanitizeGbpUrl } from "@/lib/business-types";
+import { verifyAbn, AbnVerificationSnapshot } from "@/lib/abn";
 
 const RATE_LIMIT_PER_24H = 1;
 
@@ -217,6 +218,26 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // ABN verification — ping ABR API via GUID on page creation (best-effort, never blocks save)
+    const inputAbn = String(body.abn || "").trim().replace(/\s+/g, "") || null;
+    let abnVerificationSnapshot: AbnVerificationSnapshot | null = null;
+    if (inputAbn && /^\d{11}$/.test(inputAbn)) {
+      try {
+        const abnResult = await verifyAbn(inputAbn, businessName);
+        abnVerificationSnapshot = {
+          abn: abnResult.normalizedAbn,
+          status: abnResult.status,
+          confidence: abnResult.confidence,
+          checkedAt: abnResult.checkedAt,
+          matchedBusinessName: abnResult.matchedBusinessName ?? null,
+          message: abnResult.message,
+        };
+      } catch {
+        // Best-effort — never fail a page create because the ABR was down
+        console.warn("[credentials-ai][page-create] ABN verification failed silently", { abn: inputAbn });
+      }
+    }
+
     const adminClient = getAdminClient();
     if (!adminClient) {
       return NextResponse.json(
@@ -259,6 +280,7 @@ export async function POST(req: NextRequest) {
     if (businessType) metadata.business_type = businessType;
     if (serviceAreas.length > 0) metadata.service_areas = serviceAreas;
     if (gbpUrl) metadata.google_business_profile_url = gbpUrl;
+    if (abnVerificationSnapshot) metadata.abn_verification = abnVerificationSnapshot;
 
     const pagePayload: Record<string, unknown> = {
       slug,
@@ -273,6 +295,7 @@ export async function POST(req: NextRequest) {
       social_links: socialLinks,
       metadata,
       brand_color: brandColor,
+      abn: inputAbn,
     };
 
     if (creatorEmail) {

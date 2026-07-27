@@ -229,6 +229,22 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
           </p>
         </div>
       </div>
+
+      <div>
+        <label className="block text-sm font-medium mb-1">ABN (optional)</label>
+        <input
+          name="abn"
+          inputMode="numeric"
+          autoComplete="off"
+          maxLength={14}
+          placeholder="52 699 330 553"
+          className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
+        />
+        <p className="text-xs text-gray-500 mt-1">
+          Your Australian Business Number. We check it against the official ABR in real time — this powers the ABN Verified badge on your page.
+        </p>
+      </div>
+
         <div>
           <label className="block text-sm font-medium mb-1">
             Your page name * <span className="font-normal text-gray-600">(enter business or webpage name)</span>

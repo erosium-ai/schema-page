@@ -16,14 +16,25 @@ export interface FaqItem {
   answer: string;
 }
 
+export interface AbnVerificationSnapshot {
+  abn: string;
+  status: string;
+  confidence: string;
+  checkedAt: string;
+  matchedBusinessName: string | null;
+  message: string;
+}
+
 export interface PageMetadata {
   faqs?: FaqItem[];
+  abn_verification?: AbnVerificationSnapshot;
 }
 
 export interface PageData {
   id?: string;
   slug: string;
   business_name: string;
+  abn?: string;
   tagline?: string;
   description?: string;
   services?: ServiceItem[];
