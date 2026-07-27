@@ -27,12 +27,21 @@ export const metadata: Metadata = {
     siteName: "Credentials AI",
     locale: "en_AU",
     type: "website",
+    images: [
+      {
+        url: "https://credentialsai.com.au/og-image.png",
+        width: 512,
+        height: 512,
+        alt: "Credentials AI — AI-Ready Business Profiles with ABN Verification",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Credentials AI | AI-Ready Small Business Profiles",
     description:
       "Verify your business ABN automatically and step into the new AI search layer.",
+    images: ["https://credentialsai.com.au/og-image.png"],
   },
   robots: {
     index: true,
