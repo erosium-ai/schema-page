@@ -47,6 +47,76 @@ const faqSchema = {
   ]
 };
 
+/** Organization schema — tells Google what Credentials AI is as a company, who founded it, what it offers, and that it's ABN-registered. */
+const orgSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Credentials AI",
+  "alternateName": "Credentials AI by Erosium",
+  "description": "Credentials AI builds AI-readable business profiles for Australian local businesses. Every profile includes live ABN verification against the Australian Business Register, structured data for ChatGPT, Gemini, Siri, and Google AI Overviews, and tracked enquiry tools so tradies can see what's working.",
+  "url": "https://credentialsai.com.au",
+  "email": "hello@erosium.com.au",
+  "foundingDate": "2026-06-22",
+  "founder": {
+    "@type": "Person",
+    "name": "Isaac Anasson",
+    "jobTitle": "Founder",
+    "sameAs": "https://x.com/Ikebuilds"
+  },
+  "parentOrganization": {
+    "@type": "Organization",
+    "name": "Beastly Tech GC Pty Ltd",
+    "identifier": {
+      "@type": "PropertyValue",
+      "propertyID": "Australian Business Number",
+      "value": "52699330553"
+    }
+  },
+  "identifier": {
+    "@type": "PropertyValue",
+    "propertyID": "Australian Business Number",
+    "value": "52699330553",
+    "description": "ABN verified active via Australian Business Register API — Beastly Tech GC Pty Ltd"
+  },
+  "areaServed": {
+    "@type": "Country",
+    "name": "Australia"
+  },
+  "makesOffer": [
+    {
+      "@type": "Offer",
+      "itemOffered": {
+        "@type": "Service",
+        "name": "Free AI-Ready Business Page",
+        "description": "A free AI-readable business profile with ABN verification badge, structured data for AI assistants, QR code, and basic SEO.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "AUD"
+        }
+      }
+    },
+    {
+      "@type": "Offer",
+      "itemOffered": {
+        "@type": "Service",
+        "name": "Founding Member Upgrade",
+        "description": "Premium business profile with verified lead engine, tracked enquiry dashboard, Pro FAQs, priority support, and analytics.",
+        "offers": {
+          "@type": "Offer",
+          "price": "49",
+          "priceCurrency": "AUD",
+          "description": "One-time Founding Member payment"
+        }
+      }
+    }
+  ],
+  "sameAs": [
+    "https://x.com/Ikebuilds",
+    "https://linkedin.com/company/erosium"
+  ]
+};
+
 export default function Home() {
   return (
     <div className="min-h-screen bg-gray-50">
@@ -54,6 +124,11 @@ export default function Home() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      {/* Organization structured data — tells Google who we are, our ABN, founder, and what we sell */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
       />
 
       {/* === SOLO OPERATOR HERO — intent-aware (free vs paid) === */}
