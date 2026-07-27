@@ -1,8 +1,8 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Terms of Service — SchemaPage",
-  description: "SchemaPage terms of service.",
+  title: "Terms of Service — Credentials AI Profile Builder",
+  description: "Credentials AI Profile Builder terms of service.",
 };
 
 export default function TermsPage() {
@@ -14,13 +14,13 @@ export default function TermsPage() {
 
         <h2>1. Acceptance</h2>
         <p>
-          By accessing or using SchemaPage, you agree to be bound by these Terms
+          By accessing or using the Credentials AI Profile Builder, you agree to be bound by these Terms
           of Service. If you do not agree, please do not use our service.
         </p>
 
         <h2>2. Description of Service</h2>
         <p>
-          SchemaPage creates AI-readable business listing pages with structured
+          Credentials AI creates AI-readable business listing pages with structured
           Schema.org markup. Pages include business details, services, contact
           information, and machine-readable exports.
         </p>
@@ -28,20 +28,20 @@ export default function TermsPage() {
         <h2>3. User Responsibilities</h2>
         <p>
           You are responsible for the accuracy of the information you submit.
-          You may not use SchemaPage for unlawful, fraudulent, or abusive
+          You may not use Credentials AI for unlawful, fraudulent, or abusive
           purposes. You must have the right to publish any content you upload.
         </p>
 
         <h2>4. Payments & Refunds</h2>
         <p>
-          Pro upgrades are processed securely via Stripe. All purchases are
+          Paid upgrades are processed securely via Stripe. All purchases are
           covered by a 30-day money-back guarantee. To request a refund, contact
           us using the details below.
         </p>
 
         <h2>5. Limitation of Liability</h2>
         <p>
-          SchemaPage is provided “as is” without warranties of any kind. We are
+          Credentials AI is provided “as is” without warranties of any kind. We are
           not liable for any direct, indirect, incidental, or consequential
           damages arising from your use of the service.
         </p>

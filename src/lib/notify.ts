@@ -1,5 +1,5 @@
 // 🔑 Keywords: Credentials AI founder notify, Resend, checkout safety net, new founding member alert
-// Safety-net notifier for the SchemaPage → Credentials AI checkout flow.
+// Safety-net notifier for the profile-builder → Credentials AI checkout flow.
 // If Resend is configured, emails the founder when a new paid checkout lands.
 // If not configured, falls back to structured console logs so nothing is lost.
 
@@ -44,7 +44,7 @@ function buildFounderEmailHtml(p: NewFoundingMemberPayload): string {
     Profile: <a href="https://credentialsai.com.au/b/${encodeURIComponent(p.slug)}">credentialsai.com.au/b/${safeString(p.slug)}</a><br />
     Admin leads: <a href="https://credentialsai.com.au/admin/leads">credentialsai.com.au/admin/leads</a>
   </p>
-  <p style="margin-top:16px;color:#666;font-size:12px">Sent by the SchemaPage checkout webhook.</p>
+  <p style="margin-top:16px;color:#666;font-size:12px">Sent by the Credentials AI checkout webhook.</p>
 </div>
 `.trim();
 }

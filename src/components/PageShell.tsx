@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+import { Suspense, type CSSProperties } from "react";
 import { PageData } from "@/lib/types";
 import { generateSchemaMarkup } from "@/lib/schema-generator";
 import SchemaBadge from "@/components/SchemaBadge";
@@ -54,11 +54,17 @@ export default function PageShell({
     summaryParts.join(" ") ||
     `${page.business_name} now has a live business page. Add more details when you're ready to make it even clearer for customers.`;
 
-  const publicPageUrl = `https://schemapage-production.up.railway.app/${page.slug}`;
+  const publicPageUrl = `https://credentialsai.com.au/b/${page.slug}`;
   const qrDownloadHref = `https://api.qrserver.com/v1/create-qr-code/?size=1024x1024&data=${encodeURIComponent(publicPageUrl)}`;
+  const rawBrandAccent = page.brand_color || page.brand_colour || "#22c55e";
+  const brandAccent = /^#[0-9a-fA-F]{6}$/.test(rawBrandAccent) ? rawBrandAccent : "#22c55e";
+  const brandAccentSoft = `${brandAccent}1f`;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div
+      className="min-h-screen bg-gray-50"
+      style={isPro ? ({ "--profile-accent": brandAccent } as CSSProperties) : undefined}
+    >
       <Suspense fallback={null}>
         <CheckoutStatusBanner />
       </Suspense>
@@ -81,14 +87,14 @@ export default function PageShell({
               }
             >
               {isPro
-                ? "This is my paid Pro AI page that now lives on the internet."
-                : "SchemaPage Business Card"}
+                ? "This is my paid AI-Ready Business Page that now lives on the internet."
+                : "Credentials AI Business Card"}
             </span>
           </div>
           {isPro ? (
             <span className="inline-flex items-center gap-1.5 bg-cyan-100 text-cyan-800 text-sm font-bold px-3 py-1.5 rounded-full">
               <Sparkles className="h-4 w-4" />
-              PRO
+              AI-READY
             </span>
           ) : (
             <SchemaBadge />
@@ -122,7 +128,7 @@ export default function PageShell({
                 </p>
                 {hasTruncatedDescription && (
                   <p className="text-xs text-gray-500 mt-3">
-                    Free preview shown. Upgrade to Pro to show your full description.
+                    Free preview shown. Upgrade to the full AI-Ready Business Page to show your full description.
                   </p>
                 )}
               </details>
@@ -164,7 +170,7 @@ export default function PageShell({
               {hasHiddenServices && (
                 <p className="text-xs text-gray-500 mt-3">
                   Showing {freeServiceLimit} of {services.length} services on Free. Upgrade to
-                  Pro to show all services.
+                  the full AI-Ready Business Page to show all services.
                 </p>
               )}
             </section>
@@ -271,17 +277,21 @@ export default function PageShell({
           )}
 
           {isPro && (
-            <section className="mb-8 rounded-xl border border-violet-200 bg-violet-50/70 p-5">
+            <section
+              className="mb-8 rounded-xl border p-5"
+              style={{ borderColor: brandAccent, backgroundColor: brandAccentSoft }}
+            >
               <h2 className="text-lg font-bold mb-3 text-gray-900">QR code ready</h2>
               <p className="text-sm text-gray-700 mb-4">
-                Download your QR code and put it on business cards, invoices, van stickers, and flyers.
+                Download your QR code and use it on fridge magnets, flyers, invoices, business cards, vehicle stickers and jobsite signs. When someone scans it, they land on your verified Credentials AI profile.
               </p>
               <a
                 href={qrDownloadHref}
-                download={`${page.slug}-pro-ai-presence-qr.png`}
+                download={`${page.slug}-ai-ready-business-page-qr.png`}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-lg bg-violet-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-violet-800 transition"
+                className="inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold text-white transition hover:opacity-90"
+                style={{ backgroundColor: brandAccent }}
               >
                 <Download className="h-4 w-4" />
                 Download QR code
@@ -444,9 +454,9 @@ export default function PageShell({
             <>
               Built with{" "}
               <a href="/" className="text-brand-600 hover:underline">
-                SchemaPage
+                Credentials AI Profile Builder
               </a>{" "}
-              — AI-Agent readable business pages.
+              — AI-readable business pages.
             </>
           )}
         </div>

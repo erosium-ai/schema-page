@@ -4,11 +4,11 @@
 // membership state is always in the DB even if /welcome is never reached.
 //
 // This module talks to the SAME Supabase project used by the trustbadge app.
-// SchemaPage already has SUPABASE_URL / SERVICE_ROLE_KEY on its Railway env,
+// The profile builder already has SUPABASE_URL / SERVICE_ROLE_KEY on its Railway env,
 // which points at that shared project.
 //
 // Fallback path: if no business_profiles row exists yet for this slug when
-// payment lands, we hydrate one directly from the SchemaPage `pages` table so
+// payment lands, we hydrate one directly from the profile-builder `pages` table so
 // membership state can still be recorded. This closes the gap where a paid
 // customer could get stuck on the /welcome fallback "check your inbox" screen.
 
@@ -91,7 +91,7 @@ export async function mirrorFoundingMemberState(
       return { ok: false, reason: updErr.message };
     }
   } else {
-    // Hydrate a fresh business_profiles row from the SchemaPage `pages` table
+    // Hydrate a fresh business_profiles row from the profile-builder `pages` table
     // so paid customers never get stuck on the /welcome fallback screen.
     console.info(
       "[credentials-ai][mirror] no existing business_profiles row — hydrating from pages",
@@ -101,7 +101,7 @@ export async function mirrorFoundingMemberState(
     const { data: page, error: pageErr } = await client
       .from("pages")
       .select(
-        "id, slug, business_name, tagline, description, services, contact_email, contact_phone, website_url, location_address, social_links, metadata"
+        "id, slug, business_name, tagline, description, services, contact_email, contact_phone, website_url, location_address, social_links, metadata, brand_color"
       )
       .eq("slug", slug)
       .maybeSingle();
@@ -131,6 +131,7 @@ export async function mirrorFoundingMemberState(
       location_address: string | null;
       social_links: unknown;
       metadata: unknown;
+      brand_color: string | null;
     };
 
     const pageMeta =
@@ -159,6 +160,7 @@ export async function mirrorFoundingMemberState(
         ...pageMeta,
         tagline: p.tagline ?? null,
         location_address: p.location_address ?? null,
+        brand_color: p.brand_color ?? null,
         hydrated_from_pages_at: new Date().toISOString(),
       },
       plan: "founder",

@@ -13,7 +13,7 @@ export default function PagePreview({ page }: PagePreviewProps) {
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-bold">{page.business_name}</h2>
         <span className="inline-flex items-center gap-1 text-xs font-semibold bg-green-100 text-green-700 px-2 py-1 rounded-full">
-          AI-Agent Friendly
+          AI-Readable Profile
         </span>
       </div>
 

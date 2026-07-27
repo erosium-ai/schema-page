@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
       const businessName = session.metadata?.business_name;
 
       if (slug) {
-        // Legacy: keep SchemaPage `is_pro=true` so the profile page shows paid.
+        // Legacy: keep profile-builder `is_pro=true` so the profile page shows paid.
         try {
           await markPageAsPro(slug);
         } catch (err) {

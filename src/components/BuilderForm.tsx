@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { PageData, ServiceItem } from "@/lib/types";
 import { sanitizeSlug } from "@/lib/slug";
-import { BUSINESS_TYPES } from "@/lib/business-types";
 
 const FAQ_SEEDS: Array<{ question: string; answer: string }> = [
   {
@@ -133,7 +132,6 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
       location_address: (formData.get("location_address") as string)?.trim() || undefined,
       social_links: socialLinks,
       faqs,
-      business_type: String(formData.get("business_type") || "").trim() || undefined,
       service_areas: String(formData.get("service_areas") || "").trim() || undefined,
       google_business_profile_url:
         String(formData.get("google_business_profile_url") || "").trim() || undefined,
@@ -183,7 +181,7 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
       {isPaidIntent && (
         <div className="rounded-xl border border-brand-200 bg-brand-50 px-4 py-3 text-sm text-brand-900">
           <p className="font-semibold">
-            You&apos;re starting {isVerifiedLeadEngineIntent ? "AI-Ready Business Page" : "Pro AI Presence"}.
+            You&apos;re starting {isVerifiedLeadEngineIntent ? "AI-Ready Business Page" : "AI Presence"}.
           </p>
           <p className="mt-1">
             Step 1: create your AI-readable page. Step 2: continue to secure checkout.
@@ -247,41 +245,21 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
             We suggest you use your business name so customers can find you easily.
           </p>
           <p className="text-xs text-gray-500 mt-1">
-            Example: <span className="font-medium">www.schemapage.com/</span>
+            Example: <span className="font-medium">credentialsai.com.au/b/</span>
             <span className="font-semibold text-brand-600">joes-plumbing</span>
           </p>
           <p className="text-xs text-gray-500 mt-1">
-            Preview: <span className="font-medium">www.schemapage.com/</span>
+            Preview: <span className="font-medium">credentialsai.com.au/b/</span>
             <span className="font-semibold text-brand-600">{slugValue || "your-business-name"}</span>
           </p>
         </div>
 
       <section className="rounded-xl border border-cyan-200 bg-cyan-50/60 p-4">
-        <h3 className="text-sm font-bold text-cyan-900">Get found — what do you do and where?</h3>
+        <h3 className="text-sm font-bold text-cyan-900">Get found — where do you work?</h3>
         <p className="mt-1 text-xs text-cyan-800">
-          These three answers do the heavy lifting for AI and search visibility.
+          These details do the heavy lifting for AI and search visibility.
         </p>
         <div className="mt-3 grid grid-cols-1 gap-3">
-          <div>
-            <label className="block text-sm font-medium mb-1">What type of business are you?</label>
-            <select
-              name="business_type"
-              defaultValue=""
-              className="w-full border rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500"
-            >
-              <option value="" disabled>
-                Pick your trade or industry…
-              </option>
-              {BUSINESS_TYPES.map((t) => (
-                <option key={t.value} value={t.value}>
-                  {t.label}
-                </option>
-              ))}
-            </select>
-            <p className="mt-1 text-xs text-gray-500">
-              This tells AI systems exactly what you are — no guessing.
-            </p>
-          </div>
           <div>
             <label className="block text-sm font-medium mb-1">Which suburbs do you cover?</label>
             <textarea
@@ -311,9 +289,9 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
       </section>
 
       <section className="rounded-xl border border-sky-200 bg-sky-50/60 p-4">
-        <h3 className="text-sm font-bold text-sky-900">Pro-ready social links</h3>
+        <h3 className="text-sm font-bold text-sky-900">AI-ready social links</h3>
         <p className="mt-1 text-xs text-sky-800">
-          These power your Pro social/contact visibility block.
+          These power your AI-Ready Business Page social/contact visibility block.
         </p>
         <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3">
           <input
@@ -344,9 +322,9 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
       </section>
 
       <section className="rounded-xl border border-violet-200 bg-violet-50/60 p-4">
-        <h3 className="text-sm font-bold text-violet-900">Pro-ready FAQ section</h3>
+        <h3 className="text-sm font-bold text-violet-900">AI-ready FAQ section</h3>
         <p className="mt-1 text-xs text-violet-800">
-          Add answers customers and AI search tools ask for. Publish these on Pro pages.
+          Add answers customers and AI search tools ask for. Publish these on AI-Ready Business Pages.
         </p>
         <div className="mt-3 flex flex-wrap gap-2">
           {FAQ_SEEDS.map((seed) => (
@@ -501,7 +479,11 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
             defaultValue="#22c55e"
             className="h-10 w-20 border rounded cursor-pointer"
           />
-          <span className="text-sm text-gray-600">Pick your brand accent</span>
+          <span className="text-sm text-gray-600">
+            {isPaidIntent
+              ? "Pick your brand accent — this colour is applied to your AI-Ready Business Page."
+              : "Pick your brand accent — it applies when you upgrade to the full AI-Ready Business Page."}
+          </span>
         </div>
       </div>
 
@@ -521,10 +503,10 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
       {success && (
         <div className="space-y-4">
           <div className="p-3 bg-green-50 text-green-700 rounded-lg text-sm">
-            <p>Page created! Your AI-Agent Friendly page is live.</p>
+            <p>Page created! Your AI-readable profile is live.</p>
             {createdSlug && (
               <p className="mt-1">
-                Open: <a className="underline" href={`/${createdSlug}`} target="_blank" rel="noreferrer">/{createdSlug}</a>
+                Open: <a className="underline" href={`https://credentialsai.com.au/b/${createdSlug}`} target="_blank" rel="noreferrer">credentialsai.com.au/b/{createdSlug}</a>
               </p>
             )}
           </div>
@@ -609,14 +591,14 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
           : isPaidIntent
             ? isVerifiedLeadEngineIntent
               ? PAID_SUBMIT_LABEL
-              : "Create my Pro AI Presence"
+              : "Create my AI Presence"
             : "Create AI-readable business profile"}
       </button>
 
       {isPaidIntent && (
         <div className="rounded-2xl bg-gradient-to-b from-slate-900 to-slate-800 border-2 border-emerald-400/50 px-5 py-5 shadow-xl shadow-emerald-400/5">
           <p className="text-sm font-extrabold text-emerald-300 tracking-wide">
-            {isVerifiedLeadEngineIntent ? "AI-Ready Business Page includes:" : "Pro AI Presence includes:"}
+            {isVerifiedLeadEngineIntent ? "AI-Ready Business Page includes:" : "AI Presence includes:"}
           </p>
           <div className="mt-3 grid gap-2.5 text-sm leading-relaxed sm:grid-cols-2">
             {(isVerifiedLeadEngineIntent ? VERIFIED_LEAD_ENGINE_BENEFITS : PRO_AI_PRESENCE_BENEFITS).map((benefit) => (

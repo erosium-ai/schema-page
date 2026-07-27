@@ -8,7 +8,7 @@ export function generateSchemaMarkup(page: PageData): SchemaMarkup {
     "@type": "LocalBusiness",
     name: page.business_name,
     description: page.tagline || page.description || "",
-    url: page.website_url || `https://schemapage.io/${page.slug}`,
+    url: page.website_url || `https://credentialsai.com.au/b/${page.slug}`,
     email: page.contact_email || undefined,
     telephone: page.contact_phone || undefined,
     address: page.location_address

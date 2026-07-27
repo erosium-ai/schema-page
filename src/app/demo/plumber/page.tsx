@@ -25,10 +25,10 @@ const page: PageData = {
 };
 
 export const metadata: Metadata = {
-  title: `${page.business_name} — SchemaPage`,
+  title: `${page.business_name} — Credentials AI Demo`,
   description: page.tagline || page.description,
   openGraph: {
-    title: `${page.business_name} — SchemaPage`,
+      title: `${page.business_name} — Credentials AI Demo`,
     description: page.tagline || page.description,
     url: `${siteUrl}/demo/plumber`,
     type: "website",

@@ -53,7 +53,7 @@ function HeroContent() {
               <>
                 Professional online presence.
                 <br />
-                <span className="text-emerald-300">Start free. $12.90/week.</span>
+                <span className="text-emerald-300">Start free — or unlock the full toolkit for $12.90/week.</span>
               </>
             )}
           </h1>
@@ -61,7 +61,7 @@ function HeroContent() {
           <p className="text-lg md:text-xl text-slate-300 mb-8 max-w-2xl mx-auto">
             {isPaid
               ? "Get found on Google & AI, show verified trust, track every lead — all for less than your daily coffee."
-              : "Stop looking dodgy when someone Googles your business. Get found, look legit, track your leads — start free, cancel anytime."}
+              : "Give people something real to find when they search for you — on Google, in AI, wherever your next customer is looking. A proper page, verified details, and a way to reach you — start free, cancel anytime."}
           </p>
 
           {/* Feature pills */}

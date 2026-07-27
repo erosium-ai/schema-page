@@ -1,6 +1,6 @@
 "use client";
 
-/* 🔑 Keywords: SchemaPage support link, email popover, copy email, mailto fallback */
+/* 🔑 Keywords: Credentials AI support link, email popover, copy email, mailto fallback */
 
 import { useState } from "react";
 

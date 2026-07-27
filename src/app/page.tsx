@@ -3,7 +3,7 @@ import BuilderFormIntent from "@/components/BuilderFormIntent";
 import SchemaBadge from "@/components/SchemaBadge";
 import HeroSection from "@/components/HeroSection";
 import BuilderIntro from "@/components/BuilderIntro";
-import { Wrench, Coffee, BookOpen, ArrowRight } from "lucide-react";
+import { ArrowRight, Search, Shield } from "lucide-react";
 import { Suspense } from "react";
 
 export const revalidate = 60;
@@ -19,7 +19,7 @@ export default function Home() {
         <header className="bg-white border-b">
           <div className="max-w-4xl mx-auto px-4 py-6 flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-extrabold tracking-tight">SchemaPage</h1>
+              <h1 className="text-2xl font-extrabold tracking-tight">Credentials AI Profile Builder</h1>
               <p className="text-sm text-gray-600">Create an AI-readable business profile that can grow into an AI-Ready Business Page.</p>
             </div>
             <SchemaBadge />
@@ -44,28 +44,24 @@ export default function Home() {
           </div>
 
           <section className="mt-16">
-            <h2 className="text-xl font-bold mb-6 text-center">See it in action</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <h2 className="text-xl font-bold mb-2 text-center">See it in action</h2>
+            <p className="mx-auto mb-6 max-w-2xl text-center text-sm text-gray-600">
+              View the current Credentials AI profile style — not the old plain demo pages.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <DemoCard
-                href="/demo/plumber"
-                icon={<Wrench className="h-6 w-6 text-orange-600" />}
-                name="Joe&apos;s Plumbing"
-                tagline="Blocked drains fixed today"
-                color="#e85d04"
+                href="https://credentialsai.com.au/b/sample-plumbing-co"
+                icon={<Shield className="h-6 w-6 text-emerald-600" />}
+                name="AI-Ready Business Page"
+                tagline="Premium profile with TrustBadge, enquiry form and lead proof panels"
+                color="#10b981"
               />
               <DemoCard
-                href="/demo/cafe"
-                icon={<Coffee className="h-6 w-6 text-amber-800" />}
-                name="Gold Coast Coffee House"
-                tagline="Best flat white in Broadbeach"
-                color="#6b4226"
-              />
-              <DemoCard
-                href="/demo/bookkeeper"
-                icon={<BookOpen className="h-6 w-6 text-blue-600" />}
-                name="Bright Bookkeeping"
-                tagline="Your books, sorted."
-                color="#2563eb"
+                href="https://credentialsai.com.au/b/sample-free-card"
+                icon={<Search className="h-6 w-6 text-cyan-600" />}
+                name="Free AI Business Card"
+                tagline="Clean public starter profile with AI-readable structure"
+                color="#06b6d4"
               />
             </div>
           </section>
@@ -80,8 +76,8 @@ export default function Home() {
               description="Built-in Schema.org JSON-LD so agents know exactly what you offer."
             />
             <FeatureCard
-              title="Machine Export"
-              description="One-click JSON + Markdown exports for any AI system."
+              title="QR-ready profile"
+              description="Paid profiles include a downloadable QR code for flyers, magnets, invoices and vehicles."
             />
           </div>
         </main>

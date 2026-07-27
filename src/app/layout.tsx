@@ -3,7 +3,7 @@ import { LegalFooter } from "@/components/LegalFooter";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "SchemaPage — Credentials AI Profile Builder",
+  title: "Credentials AI — AI Profile Builder",
   description: "Create an AI-readable business profile and upgrade it into an AI-Ready Business Page with tracked enquiries.",
 };
 

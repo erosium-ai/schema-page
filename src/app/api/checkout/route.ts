@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
 
     // AI-Ready Business Page checkouts now thread the customer
     // straight into the Credentials AI /welcome flow so they land on a real
-    // dashboard instead of the SchemaPage builder page. Legacy `pro` checkouts
+    // dashboard instead of the profile-builder page. Legacy `pro` checkouts
     // keep the old success/cancel URLs.
     const successUrl =
       plan === "verified_lead_engine"

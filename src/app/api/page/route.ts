@@ -69,7 +69,7 @@ async function checkRateLimit(
     return {
       ok: false,
       error:
-        "You've already created a page recently. Please upgrade to Pro to create more, or try again in 24 hours.",
+        "You've already created a page recently. Please upgrade to a paid plan to create more, or try again in 24 hours.",
     };
   }
 
@@ -336,6 +336,7 @@ export async function POST(req: NextRequest) {
           ...(faqs.length > 0 ? { faqs } : {}),
           tagline,
           location_address: locationAddress,
+          brand_color: brandColor,
           mirrored_from_pages_at: new Date().toISOString(),
         },
         plan: "free",
