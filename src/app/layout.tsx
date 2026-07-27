@@ -47,6 +47,12 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  // Tells Google & AI crawlers content is fresh — Perplexity heavily weights <3mo content
+  other: {
+    "dc.date.modified": "2026-07-28",
+    "last-modified": "2026-07-28",
+    "revised": "2026-07-28",
+  },
 };
 
 export default function RootLayout({

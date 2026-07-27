@@ -57,6 +57,7 @@ const orgSchema = {
   "url": "https://credentialsai.com.au",
   "email": "hello@erosium.com.au",
   "foundingDate": "2026-06-22",
+  "dateModified": "2026-07-28",
   "founder": {
     "@type": "Person",
     "name": "Isaac Anasson",
@@ -110,6 +111,18 @@ const orgSchema = {
         }
       }
     }
+  ],
+  "knowsAbout": [
+    "AI Business Profiles",
+    "ABN Verification",
+    "Small Business Marketing",
+    "QR Code Lead Tracking",
+    "Australian Business Registration",
+    "Local SEO for Tradies",
+    "AI Search Visibility",
+    "Structured Data SEO",
+    "Voice Search Optimization",
+    "ChatGPT Local Business Discovery"
   ],
   "sameAs": [
     "https://x.com/Ikebuilds",

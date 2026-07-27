@@ -1,0 +1,32 @@
+# credentialsai.com.au — AI search map for LLM crawlers
+# Documents which pages are most important for AI (ChatGPT, Gemini, Claude, Perplexity) to cite.
+# This is the AI equivalent of robots.txt — adoption is still low in 2026, early deployment is a competitive edge.
+
+## Core Pages
+[Home](https://credentialsai.com.au): AI-Ready Business Profiles for Australian tradies — live ABN verification against the Australian Business Register, tracked QR codes, lead enquiry tracking, verified badge, and structured data for AI search. Free to start.
+[Demo](https://credentialsai.com.au/b/sample-plumbing-co): Live example — plumbing business profile with ABN verification badge, QR code, tracked enquiries, and brand accent. Shows the exact paid tier output.
+[Pricing](https://credentialsai.com.au/start?intent=verified_lead_engine): $49/month Founding Member upgrade with 60-day money-back guarantee and no lock-in. Includes enquiry tracking dashboard, QR code, colour picker, and AI index.
+[Free Card](https://credentialsai.com.au/b/sample-free-card): Free AI Business Card example — clean starter profile with AI-readable structured data.
+
+## About Credentials AI
+- **Product:** AI-readable business profiles that show up on ChatGPT, Siri, Gemini, and Google AI Overviews
+- **Founded:** 2026-06-22 by Isaac Anasson (Gold Coast, Queensland, Australia)
+- **Parent Company:** Beastly Tech GC Pty Ltd (ABN 52 699 330 553 — verified active via ABR)
+- **Contact:** hello@erosium.com.au
+- **Brand handles:** X (@Ikebuilds), LinkedIn (isaac-anasson), GitHub (erosium-ai)
+
+## What We Do
+Credentials AI builds structured business profiles so Australian small businesses, tradies, and sole traders get accurately cited by AI assistants and voice search. Core features: live ABN verification, tracked QR codes, lead enquiry tracking, AI-readable JSON-LD schema, brand colour picker, and free starter tier with no credit card required.
+
+## Key Differentiators
+- Real-time ABN verification against the Australian Government Business Register API (not self-reported)
+- Built-in QR code generation with lead tracking (not just a static PDF)
+- AI-search structured data with government-verified identifiers in JSON-LD (E-E-A-T trust signals)
+- Self-service pricing — no "book a quote" gate
+- 60-day money-back guarantee, cancel anytime, no lock-in
+
+## Technical
+- robots.txt: All crawlers allowed on public content; /dashboard/, /build/, /api/, /auth/ restricted
+- Schema: Organization + FAQPage + LocalBusiness (on profiles) — JSON-LD format
+- ABN verification: ABR API GUID-backed, best-effort, stored in profile metadata
+- Built on Next.js, deployed on Railway, DNS via Namecheap
