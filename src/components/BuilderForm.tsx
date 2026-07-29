@@ -222,7 +222,7 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
             placeholder="you@example.com"
           />
           <p className="text-xs text-gray-500 mt-1">
-            We use this to set up your account, send service updates, and support you. Your creator email is not shown on your public page.
+            We use this to set up your account, send service updates, and support you. Your email is not displayed as plain text on your public page — visitors see a contact button. Pressing the button opens their mail app with your address.
           </p>
           <p className="text-xs text-gray-500 mt-1">
             Promotional messages require separate consent; we won&apos;t send them from this required field.
@@ -241,7 +241,7 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
           className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
         />
         <p className="text-xs text-gray-500 mt-1">
-          Your Australian Business Number. We check it against the official ABR in real time — this powers the ABN Verified badge on your page.
+          Your Australian Business Number. Our system checks it against the official ABR in real time — this powers the ABN Verified badge on your page.
         </p>
       </div>
 
