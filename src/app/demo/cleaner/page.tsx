@@ -7,7 +7,7 @@ const siteUrl = process.env.SITE_URL || "https://schemapage.io";
 const page: PageData = {
   slug: "coastal-clean",
   business_name: "Coastal Clean Co",
-  tagline: "Bond-back guaranteed",
+  tagline: "Bond-back cleaning specialists",
   description:
     "End of lease, office, and Airbnb cleaning on the Gold Coast. Eco-friendly products, 5-star rated.",
   services: [

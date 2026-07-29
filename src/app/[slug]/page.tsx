@@ -4,6 +4,14 @@ import { getPageBySlug } from "@/lib/supabase";
 import PageShell from "@/components/PageShell";
 import JsonLdDownload from "@/components/JsonLdDownload";
 
+// CRITICAL: Force dynamic rendering for all [slug] pages to prevent
+// stale prerendered 404s on Railway edge cache when profiles are added
+// after initial deployment. Do NOT set dynamicParams=false.
+// Build: redeploy 2026-07-28 13:50 AEST
+export const dynamic = "force-dynamic";
+export const dynamicParams = true;
+export const revalidate = 0;
+
 interface Props {
   params: Promise<{ slug: string }>;
 }

@@ -1,26 +1,39 @@
 "use client";
 
 import { useState } from "react";
+import type { LegalPolicyVersions } from "@/lib/legal-policy";
 
 interface StartProCheckoutButtonProps {
   slug: string;
-  plan?: "pro" | "verified_lead_engine";
+  plan?: "verified_lead_engine";
   billingCycle?: "monthly" | "weekly";
   label?: string;
   variant?: "primary" | "secondary";
+  accepted?: boolean;
+  requireAcceptance?: boolean;
+  policyVersions?: LegalPolicyVersions;
 }
 
 export default function StartProCheckoutButton({
   slug,
-  plan = "pro",
+  plan = "verified_lead_engine",
   billingCycle = "monthly",
   label = "Continue to secure payment",
   variant = "primary",
+  accepted = false,
+  requireAcceptance = false,
+  policyVersions,
 }: StartProCheckoutButtonProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const blockedByAcceptance = requireAcceptance && !accepted;
 
   const handleContinue = async () => {
+    if (blockedByAcceptance) {
+      setError("Please accept the Terms and acknowledge the policies first.");
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
@@ -28,7 +41,13 @@ export default function StartProCheckoutButton({
       const response = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slug, plan, billingCycle }),
+        body: JSON.stringify({
+          slug,
+          plan,
+          billingCycle,
+          accepted: requireAcceptance ? accepted : undefined,
+          policyVersions: requireAcceptance ? policyVersions : undefined,
+        }),
       });
 
       const data = await response.json();
@@ -50,11 +69,11 @@ export default function StartProCheckoutButton({
     <div className="space-y-3">
       <button
         onClick={handleContinue}
-        disabled={loading}
+        disabled={loading || blockedByAcceptance}
         className={
           variant === "secondary"
-            ? "inline-flex w-full items-center justify-center rounded-xl border border-slate-600/70 bg-slate-950/70 px-5 py-3 text-sm font-semibold text-slate-100 transition hover:border-cyan-300 hover:bg-slate-900 disabled:opacity-60"
-            : "inline-flex w-full items-center justify-center rounded-xl bg-cyan-400 px-5 py-3 text-sm font-extrabold text-slate-950 transition hover:bg-cyan-300 disabled:opacity-60"
+            ? "inline-flex w-full items-center justify-center rounded-xl border border-slate-600/70 bg-slate-950/70 px-5 py-3 text-sm font-semibold text-slate-100 transition hover:border-cyan-300 hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
+            : "inline-flex w-full items-center justify-center rounded-xl bg-cyan-400 px-5 py-3 text-sm font-extrabold text-slate-950 transition hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-60"
         }
       >
         {loading ? "Opening secure payment..." : label}

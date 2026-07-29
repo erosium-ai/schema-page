@@ -1,10 +1,10 @@
-/* 🔑 Keywords: Credentials AI checkout page, AI-Ready Business Page, $49 monthly, $12.90 weekly, Stripe checkout */
+/* 🔑 Keywords: Credentials AI checkout page, AI-Ready Business Page, A$49 monthly, A$12.90 weekly, Stripe checkout, legal acceptance */
 
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import type { ReactNode } from "react";
 import { getPageBySlug } from "@/lib/subscription";
-import StartProCheckoutButton from "@/components/StartProCheckoutButton";
+import { LEGAL_POLICY_VERSIONS } from "@/lib/legal-policy";
+import CheckoutWithAcceptance from "@/components/CheckoutWithAcceptance";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -12,7 +12,7 @@ interface Props {
 
 const AI_READY_BENEFITS = [
   "AI-ready business page customers can call, email, or request quotes from",
-  "Trust wording based on official Australian Business Register data",
+  "Conservative business-detail trust wording based on the recorded ABR/ABN check, source and date",
   "Service, suburb, FAQ, and contact structure built for customers and AI systems",
   "Tracked calls, email clicks, quote requests, and source attribution",
   "Instant lead alerts to the business owner",
@@ -42,49 +42,16 @@ export default async function FoundingCheckoutPage({ params }: Props) {
             <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300 sm:text-base">
               You&apos;re setting up Credentials AI for{" "}
               <span className="font-semibold text-cyan-100">{page.business_name}</span>.
-              Same product. Choose weekly or monthly. Cancel anytime.
+              Same product. Choose weekly or monthly. Cancel future renewals anytime.
             </p>
           </div>
 
           <div className="grid gap-6 p-6 sm:p-8 lg:grid-cols-[1.08fr_0.92fr]">
             <section className="space-y-4">
-              <div className="grid gap-4 sm:grid-cols-2">
-                <PlanCard
-                  label="Best value"
-                  title="Monthly"
-                  price="$49"
-                  suffix="/month"
-                  note="The clean default if you&apos;re ready to use it properly."
-                  button={
-                    <StartProCheckoutButton
-                      slug={page.slug}
-                      plan="verified_lead_engine"
-                      billingCycle="monthly"
-                      label="Continue with $49/month"
-                    />
-                  }
-                />
-                <PlanCard
-                  label="Lower upfront"
-                  title="Weekly"
-                  price="$12.90"
-                  suffix="/week"
-                  note="Same page, same setup, easier weekly cashflow."
-                  button={
-                    <StartProCheckoutButton
-                      slug={page.slug}
-                      plan="verified_lead_engine"
-                      billingCycle="weekly"
-                      label="Continue with $12.90/week"
-                      variant="secondary"
-                    />
-                  }
-                />
-              </div>
-
-              <p className="rounded-2xl border border-cyan-300/15 bg-cyan-300/8 px-4 py-3 text-sm leading-6 text-cyan-50">
-                Secure subscription payment is processed by Stripe. No card details are stored by Credentials AI.
-              </p>
+              <CheckoutWithAcceptance
+                slug={page.slug}
+                policyVersions={LEGAL_POLICY_VERSIONS}
+              />
             </section>
 
             <aside className="rounded-3xl border border-emerald-300/20 bg-emerald-300/8 p-5">
@@ -101,7 +68,9 @@ export default async function FoundingCheckoutPage({ params }: Props) {
               </ul>
 
               <div className="mt-6 rounded-2xl border border-white/10 bg-slate-950/55 p-4 text-xs leading-6 text-slate-400">
-                Business details are checked against official Australian Business Register data. We only show clear, conservative trust wording from that source.
+                Business-detail trust wording is limited to the specific check,
+                source and date shown on the profile. It is not a licence,
+                insurance, quality, safety or general-compliance guarantee.
               </div>
             </aside>
           </div>
@@ -116,35 +85,6 @@ export default async function FoundingCheckoutPage({ params }: Props) {
           </div>
         </div>
       </main>
-    </div>
-  );
-}
-
-function PlanCard({
-  label,
-  title,
-  price,
-  suffix,
-  note,
-  button,
-}: {
-  label: string;
-  title: string;
-  price: string;
-  suffix: string;
-  note: string;
-  button: ReactNode;
-}) {
-  return (
-    <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-5 shadow-xl shadow-slate-950/30">
-      <p className="text-xs font-bold uppercase tracking-[0.22em] text-cyan-200">{label}</p>
-      <h2 className="mt-3 text-xl font-black text-white">{title}</h2>
-      <p className="mt-3 flex items-end gap-1">
-        <span className="text-4xl font-black tracking-tight text-white">{price}</span>
-        <span className="pb-1 text-sm font-semibold text-slate-300">{suffix}</span>
-      </p>
-      <p className="mt-3 min-h-12 text-sm leading-6 text-slate-400">{note}</p>
-      <div className="mt-5">{button}</div>
     </div>
   );
 }

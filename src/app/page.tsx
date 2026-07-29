@@ -25,7 +25,7 @@ const faqSchema = {
       "name": "What does ABN Verified actually mean?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "It means our system automatically checks the business ABN and registered details against the Australian Business Register — the official government database — and publishes what was checked and when. This gives customers confidence the business is real and properly registered."
+        "text": "It means our system performs an automated check of the business ABN and available registered details against Australian Business Register data using ABR API access issued for Credentials AI, then publishes the source, status and checked date. It is not a government endorsement and is not a licence, insurance, quality or general-compliance guarantee."
       }
     },
     {
@@ -33,7 +33,7 @@ const faqSchema = {
       "name": "Can AI assistants like ChatGPT and Siri actually find my business through this?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. Your AI-Ready Business Page includes structured data built for ChatGPT, Gemini, Siri, Claude, and Google AI Overviews. When someone asks an AI assistant for a local service, your page is structured so the AI can accurately read your business name, services, location, contact details and verified status."
+        "text": "No discovery or recommendation is guaranteed. Your AI-Ready Business Page includes structured data built so systems like ChatGPT, Gemini, Siri, Claude, and Google AI Overviews can accurately read your business name, services, location, contact details and checked business-detail status if they crawl or cite the page."
       }
     },
     {
@@ -53,11 +53,11 @@ const orgSchema = {
   "@type": "Organization",
   "name": "Credentials AI",
   "alternateName": "Credentials AI by Erosium",
-  "description": "Credentials AI builds AI-readable business profiles so Australian tradies get found on ChatGPT, Siri, and Google AI Overviews. Every profile includes live ABN verification against the Australian Business Register, a tracked QR code, lead enquiry tracking, verified badge, and structured data built for AI search — free to start.",
+  "description": "Credentials AI builds AI-readable business profiles for Australian tradies and local businesses. Profiles can include best-effort ABN/business-registration check wording with source/date, a tracked QR code, lead enquiry tracking, and structured data built for AI search — free to start.",
   "url": "https://credentialsai.com.au",
   "email": "hello@erosium.com.au",
   "foundingDate": "2026-06-22",
-  "dateModified": "2026-07-28",
+  "dateModified": "2026-07-29",
   "founder": {
     "@type": "Person",
     "name": "Isaac Anasson",
@@ -77,7 +77,7 @@ const orgSchema = {
     "@type": "PropertyValue",
     "propertyID": "Australian Business Number",
     "value": "52699330553",
-    "description": "ABN verified active via Australian Business Register API — Beastly Tech GC Pty Ltd"
+    "description": "ABN confirmed active against Australian Business Register data via ABR API access (GUID-backed) — Beastly Tech GC Pty Ltd"
   },
   "areaServed": {
     "@type": "Country",
@@ -88,8 +88,8 @@ const orgSchema = {
       "@type": "Offer",
       "itemOffered": {
         "@type": "Service",
-        "name": "Free AI-Ready Business Page",
-        "description": "A free AI-readable business profile with ABN verification badge, structured data for AI assistants, QR code, and basic SEO.",
+        "name": "Free AI Business Card",
+        "description": "A free AI-readable business profile with structured data for AI assistants and basic public business details.",
         "offers": {
           "@type": "Offer",
           "price": "0",
@@ -101,23 +101,32 @@ const orgSchema = {
       "@type": "Offer",
       "itemOffered": {
         "@type": "Service",
-        "name": "Founding Member Upgrade",
-        "description": "Premium business profile with verified lead engine, tracked enquiry dashboard, Pro FAQs, priority support, and analytics.",
-        "offers": {
-          "@type": "Offer",
-          "price": "49",
-          "priceCurrency": "AUD",
-          "description": "One-time Founding Member payment"
-        }
+        "name": "AI-Ready Business Page",
+        "description": "Recurring AI-ready business page with conservative ABR/ABN-based business-detail trust wording, tracked enquiry dashboard, source attribution and weekly proof summary.",
+        "offers": [
+          {
+            "@type": "Offer",
+            "price": "49",
+            "priceCurrency": "AUD",
+            "description": "A$49 per month recurring subscription. Cancel future renewals anytime."
+          },
+          {
+            "@type": "Offer",
+            "price": "12.90",
+            "priceCurrency": "AUD",
+            "description": "A$12.90 per week recurring subscription. Cancel future renewals anytime."
+          }
+        ]
       }
     }
   ],
   "knowsAbout": [
     "AI Business Profiles",
-    "ABN Verification",
+    "Automated ABN Verification",
+    "Australian Business Register",
     "Small Business Marketing",
     "QR Code Lead Tracking",
-    "Australian Business Registration",
+    "ABN Lookup",
     "Local SEO for Tradies",
     "AI Search Visibility",
     "Structured Data SEO",
@@ -187,7 +196,7 @@ export default function Home() {
                 href="https://credentialsai.com.au/b/sample-plumbing-co"
                 icon={<Shield className="h-6 w-6 text-emerald-600" />}
                 name="AI-Ready Business Page"
-                tagline="Premium profile with TrustBadge, enquiry form and lead proof panels"
+                tagline="Premium profile with checked business-detail wording, enquiry form and lead proof panels"
                 color="#10b981"
               />
               <DemoCard
