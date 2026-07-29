@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
 import { stripe } from "@/lib/stripe";
 import { getPageBySlug } from "@/lib/subscription";
 import {
@@ -11,6 +12,54 @@ import {
 import {
   isCurrentLegalPolicyVersions,
 } from "@/lib/legal-policy";
+
+const TERMINAL_CANCELED_STATUSES = new Set(["canceled", "cancelled"]);
+
+function getAdminClient() {
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+
+  if (!serviceRoleKey || !supabaseUrl) {
+    throw new Error("Supabase env vars missing on server");
+  }
+
+  return createClient(supabaseUrl, serviceRoleKey, {
+    auth: { autoRefreshToken: false, persistSession: false },
+  });
+}
+
+async function hasBlockingPaidAssociation(slug: string): Promise<boolean> {
+  const adminClient = getAdminClient();
+  const { data, error } = await adminClient
+    .from("business_profiles")
+    .select("subscription_status, stripe_customer_id, stripe_subscription_id")
+    .eq("slug", slug)
+    .maybeSingle();
+
+  if (error) {
+    throw new Error(`business_profiles lookup failed: ${error.message}`);
+  }
+
+  const status =
+    typeof data?.subscription_status === "string"
+      ? data.subscription_status.trim().toLowerCase()
+      : "";
+
+  const hasBillingAssociation =
+    typeof data?.stripe_customer_id === "string" && data.stripe_customer_id.trim().length > 0
+      ? true
+      : typeof data?.stripe_subscription_id === "string" &&
+          data.stripe_subscription_id.trim().length > 0;
+
+  if (!hasBillingAssociation) {
+    return false;
+  }
+
+  // Any existing Stripe association (customer/subscription ids) blocks duplicate
+  // checkout unless status is explicitly terminal canceled/cancelled.
+  // Unknown/incomplete statuses must still block.
+  return !TERMINAL_CANCELED_STATUSES.has(status);
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -55,6 +104,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         { success: false, error: "Page not found" },
         { status: 404 }
+      );
+    }
+
+    if (await hasBlockingPaidAssociation(page.slug)) {
+      return NextResponse.json(
+        {
+          success: false,
+          code: "existing_paid_subscription",
+          error:
+            "This business already has an active or pending-cancellation Credentials AI subscription. Please use your existing billing, or resubscribe after cancellation is fully completed.",
+        },
+        { status: 409 }
       );
     }
 

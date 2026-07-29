@@ -70,34 +70,40 @@ export async function POST(req: NextRequest) {
               ? session.subscription
               : session.subscription?.id ?? null;
 
+          if (!subscriptionId) {
+            throw new Error(
+              `[webhook] missing subscription id for checkout.session.completed slug=${slug}`
+            );
+          }
+
           // Pull the subscription to get current_period_end + status.
           let nextPaymentAt: string | null = null;
           let subscriptionStatus: string | null = null;
-          if (subscriptionId) {
-            try {
-              // Cast to unknown → SubscriptionLike because the current Stripe
-              // typings return a Response<Subscription> wrapper for retrieve
-              // that hides the resource fields at the type level. The runtime
-              // shape is still the subscription resource.
-              type SubscriptionLike = {
-                status?: string;
-                current_period_end?: number;
-              };
-              const sub = (await stripe.subscriptions.retrieve(
-                subscriptionId
-              )) as unknown as SubscriptionLike;
-              subscriptionStatus = sub.status ?? null;
-              if (typeof sub.current_period_end === "number") {
-                nextPaymentAt = new Date(
-                  sub.current_period_end * 1000
-                ).toISOString();
-              }
-            } catch (err) {
-              console.warn("[webhook] subscription retrieve failed", {
-                subscriptionId,
-                error: (err as Error).message,
-              });
+          try {
+            // Cast to unknown → SubscriptionLike because the current Stripe
+            // typings return a Response<Subscription> wrapper for retrieve
+            // that hides the resource fields at the type level. The runtime
+            // shape is still the subscription resource.
+            type SubscriptionLike = {
+              status?: string;
+              current_period_end?: number;
+            };
+            const sub = (await stripe.subscriptions.retrieve(
+              subscriptionId
+            )) as unknown as SubscriptionLike;
+            subscriptionStatus = sub.status ?? null;
+            if (!subscriptionStatus) {
+              throw new Error("subscription_status_missing");
             }
+            if (typeof sub.current_period_end === "number") {
+              nextPaymentAt = new Date(
+                sub.current_period_end * 1000
+              ).toISOString();
+            }
+          } catch (err) {
+            throw new Error(
+              `[webhook] subscription retrieve failed for checkout.session.completed subscriptionId=${subscriptionId}: ${(err as Error).message}`
+            );
           }
 
           const paymentEmail =
@@ -105,21 +111,21 @@ export async function POST(req: NextRequest) {
             session.customer_email ||
             null;
 
-          // Mirror state into business_profiles (best-effort).
-          try {
-            await mirrorFoundingMemberState({
-              slug,
-              paymentEmail,
-              customerId,
-              subscriptionId,
-              subscriptionStatus,
-              nextPaymentAt,
-            });
-          } catch (err) {
-            console.warn("[webhook] mirror failed", {
-              slug,
-              error: (err as Error).message,
-            });
+          // Mirror state into business_profiles (required).
+          // If this fails we return non-2xx so Stripe retries and the shared
+          // membership state eventually converges.
+          const mirrorResult = await mirrorFoundingMemberState({
+            slug,
+            paymentEmail,
+            customerId,
+            subscriptionId,
+            subscriptionStatus,
+            nextPaymentAt,
+          });
+          if (!mirrorResult.ok) {
+            throw new Error(
+              `[webhook] mirror failed for checkout.session.completed slug=${slug}: ${mirrorResult.reason || "unknown"}`
+            );
           }
 
           // Notify founder (best-effort).
@@ -186,13 +192,18 @@ export async function POST(req: NextRequest) {
             ? "canceling"
             : subscription.status;
 
-        await mirrorFoundingMemberState({
+        const mirrorResult = await mirrorFoundingMemberState({
           slug,
           customerId,
           subscriptionId: subscription.id,
           subscriptionStatus: effectiveStatus,
           nextPaymentAt,
         });
+        if (!mirrorResult.ok) {
+          throw new Error(
+            `[webhook] mirror failed for ${event.type} slug=${slug}: ${mirrorResult.reason || "unknown"}`
+          );
+        }
       }
     }
 

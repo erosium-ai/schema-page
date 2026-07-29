@@ -53,6 +53,12 @@ export default function StartProCheckoutButton({
       const data = await response.json();
 
       if (!response.ok || !data.success || !data.url) {
+        if (response.status === 409 && data?.code === "existing_paid_subscription") {
+          setError(
+            "This business already has an active or pending-cancellation subscription. Use your existing billing, or try again after cancellation fully completes."
+          );
+          return;
+        }
         setError(data.error || "Unable to start checkout. Please try again.");
         return;
       }
