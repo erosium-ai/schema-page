@@ -222,7 +222,7 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
             placeholder="you@example.com"
           />
           <p className="text-xs text-gray-500 mt-1">
-            We use this to set up your account, send service updates, and support you. Your email is not displayed as plain text on your public page — visitors see a contact button. Pressing the button opens their mail app with your address.
+            We use this to set up your account, send service updates, and support you. This is your account email — it is not shown on your public page unless it matches your contact email (set below), and even then it's only revealed when someone clicks your contact button.
           </p>
           <p className="text-xs text-gray-500 mt-1">
             Promotional messages require separate consent; we won&apos;t send them from this required field.
