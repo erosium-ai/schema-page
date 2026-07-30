@@ -633,7 +633,7 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
             What happens after you pay?
           </p>
           <p className="mt-1.5 text-sm leading-relaxed text-slate-700">
-            Stripe confirms your payment, then stay on the page for a few seconds.
+            Stripe confirms your payment, then stay on the page for around 10 seconds.
             Your Credentials AI dashboard opens automatically so you can track
             calls, quote enquiries and lead sources.
           </p>

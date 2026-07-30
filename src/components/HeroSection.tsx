@@ -39,8 +39,11 @@ function HeroContent() {
       />
       <div className="relative max-w-4xl mx-auto px-4 py-16 md:py-20">
         <div className="text-center">
-          <p className="text-sm font-semibold tracking-widest uppercase mb-4 text-cyan-300">
-            For your side hustle. Your new business. Your next move.
+          <p className="text-sm font-semibold tracking-widest uppercase mb-3 text-cyan-300">
+            For your existing business. Your new business. Your side hustle.
+          </p>
+          <p className="mb-5 text-sm font-semibold text-slate-300 md:text-base">
+            Every business needs verification and AI readability.
           </p>
 
           <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight mb-6 leading-tight">

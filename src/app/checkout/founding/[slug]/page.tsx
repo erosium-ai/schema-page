@@ -44,6 +44,10 @@ export default async function FoundingCheckoutPage({ params }: Props) {
               <span className="font-semibold text-cyan-100">{page.business_name}</span>.
               Same product. Choose weekly or monthly. Cancel future renewals anytime.
             </p>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-cyan-100/90 sm:text-base">
+              Once payment is complete, we&rsquo;ll open your dashboard automatically.
+              This can take around 10 seconds.
+            </p>
           </div>
 
           <div className="grid gap-6 p-6 sm:p-8 lg:grid-cols-[1.08fr_0.92fr]">
