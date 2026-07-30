@@ -69,15 +69,23 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
   const isVerifiedLeadEngineIntent = intent === "verified_lead_engine";
   const isPaidIntent = isProIntent || isVerifiedLeadEngineIntent;
 
+  const getCheckoutUrl = (
+    slug: string,
+    checkoutIntent: "pro" | "verified_lead_engine" = isVerifiedLeadEngineIntent ? "verified_lead_engine" : "pro"
+  ) => checkoutIntent === "verified_lead_engine"
+    ? `/checkout/founding/${encodeURIComponent(slug)}`
+    : `/checkout/pro/${encodeURIComponent(slug)}`;
+
+  const getPublicProfileUrl = (slug: string) =>
+    `https://credentialsai.com.au/b/${encodeURIComponent(slug)}`;
+
   const startProCheckout = async (
     slug: string,
     checkoutIntent: "pro" | "verified_lead_engine" = isVerifiedLeadEngineIntent ? "verified_lead_engine" : "pro"
   ): Promise<boolean> => {
     setProCheckoutLoading(true);
     setProCheckoutError(null);
-    window.location.href = checkoutIntent === "verified_lead_engine"
-      ? `/checkout/founding/${encodeURIComponent(slug)}`
-      : `/checkout/pro/${encodeURIComponent(slug)}`;
+    window.location.assign(getCheckoutUrl(slug, checkoutIntent));
     return true;
   };
 
@@ -529,7 +537,16 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
             <p>Page created! Your AI-readable profile is live.</p>
             {createdSlug && (
               <p className="mt-1">
-                Open: <a className="underline" href={`https://credentialsai.com.au/b/${createdSlug}`} target="_blank" rel="noreferrer">credentialsai.com.au/b/{createdSlug}</a>
+                {isPaidIntent
+                  ? "Next: choose weekly or monthly on the secure checkout screen."
+                  : (
+                    <>
+                      Open:{" "}
+                      <a className="underline" href={getPublicProfileUrl(createdSlug)} target="_blank" rel="noreferrer">
+                        credentialsai.com.au/b/{createdSlug}
+                      </a>
+                    </>
+                  )}
               </p>
             )}
           </div>
@@ -538,13 +555,15 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
             <div className="rounded-2xl bg-gradient-to-b from-slate-900 to-slate-800 border-2 border-emerald-400/50 p-5 sm:p-6 shadow-xl shadow-emerald-400/5">
               {/* Header */}
               <p className="text-sm font-extrabold text-emerald-300 tracking-wide">
-                🚀 YOUR PAGE IS LIVE
+                🚀 {isPaidIntent ? "NEXT STEP: SECURE CHECKOUT" : "YOUR PAGE IS LIVE"}
               </p>
               <p className="mt-1 text-base font-bold text-white">
-                Upgrade to an AI-Ready Business Page
+                {isPaidIntent ? "Choose your AI-Ready Business Page billing" : "Upgrade to an AI-Ready Business Page"}
               </p>
               <p className="mt-1 text-sm text-slate-300">
-                ABN-backed trust profile, tracked enquiries, instant alerts, and weekly proof reporting.
+                {isPaidIntent
+                  ? "Your page has been created. Continue to secure checkout to choose A$12.90/week or A$49/month."
+                  : "ABN-backed trust profile, tracked enquiries, instant alerts, and weekly proof reporting."}
               </p>
 
               {/* Benefit pills */}
@@ -564,24 +583,28 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
                   disabled={proCheckoutLoading}
                   className="w-full inline-flex items-center justify-center rounded-full bg-emerald-400 hover:bg-emerald-300 text-slate-900 px-6 py-3.5 text-sm font-bold transition-colors shadow-lg shadow-emerald-400/20 disabled:opacity-60"
                 >
-                  {proCheckoutLoading ? "Opening secure checkout..." : "Choose $49/month or $12.90/week"}
+                  {proCheckoutLoading
+                    ? "Opening secure checkout..."
+                    : isPaidIntent
+                      ? "Continue to secure checkout"
+                      : "Choose $49/month or $12.90/week"}
                 </button>
 
                 {/* Secondary actions */}
                 <div className="grid grid-cols-2 gap-3">
                   <a
-                    href={`/${createdSlug}`}
+                    href={getPublicProfileUrl(createdSlug)}
                     target="_blank"
                     rel="noreferrer"
                     className="inline-flex items-center justify-center rounded-full border border-slate-600 bg-slate-800/60 px-4 py-2.5 text-sm font-medium text-slate-300 hover:border-slate-500 hover:text-white transition"
                   >
-                    View my page
+                    View public profile
                   </a>
                   <a
-                    href={`/checkout/founding/${encodeURIComponent(createdSlug)}`}
+                    href={getCheckoutUrl(createdSlug, "verified_lead_engine")}
                     className="inline-flex items-center justify-center gap-1.5 rounded-full border-2 border-emerald-400/60 bg-emerald-400/10 px-4 py-2.5 text-sm font-bold text-emerald-300 hover:bg-emerald-400/20 hover:border-emerald-400 transition"
                   >
-                    See what&apos;s included
+                    Continue to checkout
                   </a>
                 </div>
               </div>
