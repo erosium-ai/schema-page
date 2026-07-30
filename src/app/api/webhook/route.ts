@@ -186,11 +186,12 @@ export async function POST(req: NextRequest) {
             ? null
             : new Date(periodEnd * 1000).toISOString();
 
+        // Persist only Stripe-native statuses accepted by the shared database
+        // constraint. A scheduled cancellation remains active until Stripe
+        // emits the terminal canceled/deleted event, preserving entitlement.
         const effectiveStatus = isTerminalCancellation
           ? "canceled"
-          : isScheduledCancellation
-            ? "canceling"
-            : subscription.status;
+          : subscription.status;
 
         const mirrorResult = await mirrorFoundingMemberState({
           slug,
