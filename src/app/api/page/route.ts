@@ -281,6 +281,7 @@ export async function POST(req: NextRequest) {
     if (serviceAreas.length > 0) metadata.service_areas = serviceAreas;
     if (gbpUrl) metadata.google_business_profile_url = gbpUrl;
     if (abnVerificationSnapshot) metadata.abn_verification = abnVerificationSnapshot;
+    else if (inputAbn) metadata.abn = inputAbn;
 
     const pagePayload: Record<string, unknown> = {
       slug,
@@ -295,7 +296,6 @@ export async function POST(req: NextRequest) {
       social_links: socialLinks,
       metadata,
       brand_color: brandColor,
-      abn: inputAbn,
     };
 
     if (creatorEmail) {
