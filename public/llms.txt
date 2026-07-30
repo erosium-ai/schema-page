@@ -5,7 +5,7 @@
 ## Core Pages
 [Home](https://credentialsai.com.au): AI-Ready Business Profiles for Australian tradies — live ABN verification against the Australian Business Register, tracked QR codes, lead enquiry tracking, verified badge, and structured data for AI search. Free to start.
 [Demo](https://credentialsai.com.au/b/sample-plumbing-co): Live example — plumbing business profile with ABN verification badge, QR code, tracked enquiries, and brand accent. Shows the exact paid tier output.
-[Pricing](https://credentialsai.com.au/start?intent=verified_lead_engine): $49/month Founding Member upgrade with 60-day money-back guarantee and no lock-in. Includes enquiry tracking dashboard, QR code, colour picker, and AI index.
+[Pricing](https://credentialsai.com.au/start?intent=verified_lead_engine): $49/month AI-Ready Business Page upgrade with 60-day money-back guarantee and no lock-in. Includes enquiry tracking dashboard, QR code, colour picker, and AI index.
 [Free Card](https://credentialsai.com.au/b/sample-free-card): Free AI Business Card example — clean starter profile with AI-readable structured data.
 
 ## About Credentials AI

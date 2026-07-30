@@ -106,7 +106,17 @@ export default function CheckoutWithAcceptance({
         Secure recurring subscription payment is processed by Stripe. No card
         details are stored by Credentials AI. Prices are shown in Australian
         dollars; any GST treatment is shown by Stripe or on the applicable tax
-        invoice where required.
+        invoice where required. Cancel future renewals anytime. Refunds and
+        cancellations are handled under the{" "}
+        <a
+          href={LEGAL_LINKS.refunds}
+          target="_blank"
+          rel="noreferrer"
+          className="font-semibold text-cyan-100 underline underline-offset-4"
+        >
+          Credentials AI Refund &amp; Cancellation Policy
+        </a>
+        .
       </p>
     </div>
   );

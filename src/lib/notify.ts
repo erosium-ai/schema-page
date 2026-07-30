@@ -1,4 +1,4 @@
-// 🔑 Keywords: Credentials AI founder notify, Resend, checkout safety net, new founding member alert
+// 🔑 Keywords: Credentials AI founder notify, Resend, checkout safety net, new paid customer alert
 // Safety-net notifier for the profile-builder → Credentials AI checkout flow.
 // If Resend is configured, emails the founder when a new paid checkout lands.
 // If not configured, falls back to structured console logs so nothing is lost.
@@ -26,8 +26,8 @@ function buildFounderEmailHtml(p: NewFoundingMemberPayload): string {
       : "—";
   return `
 <div style="font-family:system-ui,-apple-system,'Segoe UI',sans-serif;line-height:1.5;color:#111">
-  <h2 style="margin:0 0 12px 0">New Founding Member landed 🎉</h2>
-  <p>A Credentials AI Founding 50 checkout just completed. Follow up with a personal welcome within one business day.</p>
+  <h2 style="margin:0 0 12px 0">New AI-Ready Business Page customer 🎉</h2>
+  <p>A Credentials AI paid checkout just completed. Follow up with a personal welcome within one business day.</p>
   <table style="border-collapse:collapse;margin-top:12px">
     <tbody>
       <tr><td style="padding:4px 12px 4px 0;color:#666">Business</td><td>${safeString(p.businessName)}</td></tr>
@@ -55,7 +55,7 @@ function buildFounderEmailText(p: NewFoundingMemberPayload): string {
       ? `$${(p.amountAud / 100).toFixed(2)} AUD`
       : "—";
   return [
-    "New Founding Member landed",
+    "New AI-Ready Business Page customer",
     "",
     `Business: ${safeString(p.businessName)}`,
     `Slug: ${safeString(p.slug)}`,
@@ -100,7 +100,7 @@ export async function notifyFounderNewMember(
       body: JSON.stringify({
         from: fromAddress,
         to: [toAddress],
-        subject: `New Founding Member: ${payload.businessName || payload.slug}`,
+        subject: `New AI-Ready Business Page customer: ${payload.businessName || payload.slug}`,
         html: buildFounderEmailHtml(payload),
         text: buildFounderEmailText(payload),
       }),
