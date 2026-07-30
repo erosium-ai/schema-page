@@ -136,6 +136,7 @@ export default function BuilderForm({ onPageCreated, intent = "free" }: BuilderF
       google_business_profile_url:
         String(formData.get("google_business_profile_url") || "").trim() || undefined,
       brand_color: (formData.get("brand_color") as string) || "#22c55e",
+      intent: isVerifiedLeadEngineIntent ? "verified_lead_engine" : isProIntent ? "pro" : "free",
     };
 
     try {

@@ -93,6 +93,8 @@ function getAdminClient() {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
+    const intent = String(body.intent || "free").trim().toLowerCase();
+    const isPaidIntent = intent === "paid" || intent === "pro" || intent === "verified_lead_engine";
 
     if (!body.slug || !body.business_name) {
       return NextResponse.json(
@@ -249,12 +251,14 @@ export async function POST(req: NextRequest) {
     const clientIp = getClientIp(req);
     const ipHash = hashIp(clientIp);
 
-    const rateLimit = await checkRateLimit(adminClient, ipHash);
-    if (!rateLimit.ok) {
-      return NextResponse.json(
-        { success: false, error: rateLimit.error },
-        { status: 429 }
-      );
+    if (!isPaidIntent) {
+      const rateLimit = await checkRateLimit(adminClient, ipHash);
+      if (!rateLimit.ok) {
+        return NextResponse.json(
+          { success: false, error: rateLimit.error },
+          { status: 429 }
+        );
+      }
     }
 
     // v1.1 findability fields — all OPTIONAL (never block a save), all ride
